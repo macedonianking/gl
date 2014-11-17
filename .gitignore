@@ -1,2 +1,6 @@
 *.o
+out
+gl.Makefile
+main.target.mk
+Makefile
 .gitignore
