@@ -4,47 +4,25 @@
 #include <GL/gl.h>
 #include <GL/glut.h>
 
-static void main_initial_func();
-static void main_display_func();
-static void main_reshape_func(int w, int h);
+#include "main_application.h"
 
 int main(int argc, char **argv)
 {
-	glutInit(&argc, argv);
-	glutInitDisplayMode(GLUT_RGB | GLUT_SINGLE);
-	glutInitWindowSize(400, 200);
-	glutInitWindowPosition(100, 100);
+	struct main_entry_t *ptr;
 
-	glutCreateWindow("GLDrawLine");
-	glutDisplayFunc(&main_display_func);
-	glutReshapeFunc(&main_reshape_func);
-	
-	printf("Hello world\n");
-	main_initial_func();
+	ptr = GetMainEntry();
+	glutInit(&argc, argv);
+	glutInitDisplayMode(ptr->mGLUTMode);
+	glutInitWindowPosition(ptr->mWindowPointX, ptr->mWindowPointY);
+	glutInitWindowSize(ptr->mWindowSizeX, ptr->mWindowSizeY);
+
+	glutCreateWindow(ptr->mWindowTitle);
+	glutDisplayFunc(ptr->mDisplayFunc);
+	glutReshapeFunc(ptr->mReshapeFunc);
+
+	ptr->mInitialFunc();
 	glutMainLoop();
 	
 	return 0;
 }
 
-void main_initial_func()
-{
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-	gluOrtho2D(0.0F, 200.0F, 0.0F, 150.0F);
-
-	glClearColor(1.0F, 1.0F, 1.0F, 0.0F);
-}
-
-void main_display_func()
-{
-	printf("main_display_func enter\n");
-	glClearColor(1.0F, 1.0F,1.0F, 0.0F);
-	glClear(GL_COLOR_BUFFER_BIT);
-	
-	glFlush();
-	printf("main_display_func leave\n");
-}
-
-void main_reshape_func(int w, int h)
-{
-}
