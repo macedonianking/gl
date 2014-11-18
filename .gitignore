@@ -1,7 +1,8 @@
 *.o
 *.*.swp
+*.swp
 out
 gl.Makefile
 main.target.mk
 Makefile
-.gitignore
+main

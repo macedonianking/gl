@@ -5,11 +5,13 @@
 #include <GL/glut.h>
 
 #include "main_application.h"
+#include "quad_test.h"
 
 int main(int argc, char **argv)
 {
 	struct main_entry_t *ptr;
 
+	QuadTestInitialize();
 	ptr = GetMainEntry();
 	glutInit(&argc, argv);
 	glutInitDisplayMode(ptr->mGLUTMode);
@@ -22,6 +24,7 @@ int main(int argc, char **argv)
 
 	ptr->mInitialFunc();
 	glutMainLoop();
+	ptr->mDestroyFunc();
 	
 	return 0;
 }

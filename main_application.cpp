@@ -4,18 +4,35 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 
+#include "logging.h"
+
 #define VIEW_W	400	
 #define VIEW_H	200
 
 static void main_diaplay_func();
 static void main_reshape_func(int w, int h);
 static void main_initial_func();
+static void main_destroy_func();
 
 static bool gInitialized = false;
 static main_entry_t gMainEntry;
+static main_entry_t *gEntryPtr = NULL;
 
 struct main_entry_t *GetMainEntry()
 {
+	DASSERT(gEntryPtr);
+	return gEntryPtr;
+}
+
+void SetMainEntry(struct main_entry_t *ptr)
+{
+	DASSERT(!gEntryPtr && ptr);
+	gEntryPtr = ptr;
+}
+
+void ResetDefaultMainEntry()
+{
+	DASSERT(!gInitialized);
 	if (!gInitialized)
 	{
 		gMainEntry.mGLUTMode = GLUT_RGBA | GLUT_SINGLE;
@@ -27,8 +44,9 @@ struct main_entry_t *GetMainEntry()
 		gMainEntry.mInitialFunc = main_initial_func;
 		gMainEntry.mReshapeFunc = main_reshape_func;
 		gMainEntry.mDisplayFunc = main_diaplay_func;
+		gMainEntry.mDestroyFunc = main_destroy_func;
 	}	
-	return &gMainEntry;
+	SetMainEntry(&gMainEntry);
 }
 
 void main_initial_func()
@@ -53,5 +71,9 @@ void main_diaplay_func()
 }
 
 void main_reshape_func(int w, int h)
+{
+}
+
+void main_destroy_func()
 {
 }
