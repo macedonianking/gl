@@ -1,7 +1,7 @@
 #ifndef GL_WC_POINT_H
 #define GL_WC_POINT_H
 
-#include "basic_config.h"
+#include "base_config.h"
 
 struct wcPt2f
 {
@@ -28,5 +28,20 @@ struct wcPt3d
 	GLdouble	y;
 	GLdouble	z;
 };
+
+template<typename Tp, typename Te>
+void SetWcPoint(Tp *ptr, Te x, Te y)
+{
+	ptr->x = x;
+	ptr->y = y;
+}
+
+template<typename Tp, typename Te>
+void SetWcPoint(Tp *ptr, Te x, Te y, Te z)
+{
+	ptr->x = x;
+	ptr->y = y;
+	ptr->z = z;
+}
 
 #endif

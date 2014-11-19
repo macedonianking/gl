@@ -3,6 +3,7 @@
 
 #include <GL/gl.h>
 #include <GL/glut.h>
+#include <iostream>
 
 #include "main_application.h"
 #include "quad_test.h"
@@ -25,6 +26,7 @@ int main(int argc, char **argv)
 	ptr->mInitialFunc();
 	glutMainLoop();
 	ptr->mDestroyFunc();
+
 	
 	return 0;
 }

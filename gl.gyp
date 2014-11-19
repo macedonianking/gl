@@ -26,6 +26,12 @@
 				'main_application.h',
 				'quad_test.h',
 				'quad_test.cpp',
+				'cube.cpp',
+				'cube.h',
+				'wc_rect.cpp',
+				'wc_rect.h',
+				'wc_eclipse.cpp',
+				'wc_eclipse.h',
 			],
 			'libraries': [
 				'-lGL',
