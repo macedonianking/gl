@@ -11,7 +11,7 @@ struct wcEclipse
 	GLfloat			py;
 	GLfloat			sizeX;
 	GLfloat			sizeY;
-	GLubyte			*indexPtr;
+	GLushort		*indexPtr;
 };
 
 void wcEclipseInitialize(struct wcEclipse *ptr, int size,

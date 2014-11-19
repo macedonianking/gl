@@ -20,7 +20,7 @@ void wcEclipseInitialize(struct wcEclipse *ptr, int size,
 
 	for (int i = 0; i < size; ++i)
 	{
-		radian = 2 * CMATH_PI * i / size;
+		radian = 2 * CMATH_PI * i / (double)size;
 		SetWcPoint(ptr->buffer + i,
 				   ptr->px + ptr->sizeX * cos(radian),
 				   ptr->py + ptr->sizeY * sin(radian),
@@ -36,25 +36,15 @@ void wcEclipseDraw(struct wcEclipse *ptr)
 
 	if (ptr->indexPtr == NULL)
 	{
-		ptr->indexPtr = (GLubyte *) malloc(ptr->size * sizeof(GLubyte));
+		ptr->indexPtr = (GLushort*) malloc(ptr->size * sizeof(GLushort));
 		for (int i = 0; i != ptr->size; ++i)
 		{
 			ptr->indexPtr[i] = i;
 		}
 	}
-	for (int i = 0; i != ptr->size; ++i)
-	{
-		struct wcPt3f *pt;
 
-		pt = ptr->buffer + i;
-	}
 	glVertexPointer(3, GL_FLOAT, 0, ptr->buffer);
-	glDrawElements(GL_POLYGON, ptr->size, GL_UNSIGNED_BYTE, ptr->indexPtr);
-	error = glGetError();
-	if (GL_NO_ERROR != error)
-	{
-		std::cout << gluErrorString(error) << std::endl;
-	}
+	glDrawElements(GL_POLYGON, ptr->size, GL_UNSIGNED_SHORT, ptr->indexPtr);
 }
 
 void wcEclipseDestroy(struct wcEclipse *ptr)

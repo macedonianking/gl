@@ -54,7 +54,7 @@ void main_initial_func()
 	SetWcPoint(&origin, gWindowW / 2.0F, gWindowH / 2.0F, 0.0F);
 	wcRectFInitilize(&gRect, &origin, gWindowW / 4.0F, gWindowH / 4.0F);
 
-	wcEclipseInitialize(&gEclipse, 300, origin.x, origin.y,
+	wcEclipseInitialize(&gEclipse, 100, origin.x, origin.y,
 						gWindowW / 4.0F, gWindowH / 4.0F);
 }
 
