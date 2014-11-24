@@ -1,10 +1,14 @@
 #include "quad_test.h"
 
+#include <iostream>
+
 #include "main_application.h"
 #include "base_config.h"
 #include "cube.h"
 #include "wc_rect.h"
 #include "wc_eclipse.h"
+#include "wc_line.h"
+#include "wc_fill.h"
 
 static struct main_entry_t gMainEntry;
 
@@ -13,7 +17,7 @@ static void main_display_func();
 static void main_reshape_func(int w, int h);
 static void main_destroy_func();
 
-#define VIEW_W	400
+#define VIEW_W	200	
 #define VIEW_H	400
 
 int					gWindowW;
@@ -21,6 +25,9 @@ int					gWindowH;
 struct wc_cube_t	gCube;
 struct wcRectF		gRect;
 struct wcEclipse	gEclipse;
+
+static GLuint		gWindowSizeX;
+static GLuint		gWindowSizeY;
 
 void QuadTestInitialize()
 {
@@ -50,37 +57,34 @@ void main_initial_func()
 	glClearColor(1.0F, 1.0F, 1.0F, 0.0F);
 
 	cube_initialize(&gCube,  100);
-	
-	SetWcPoint(&origin, gWindowW / 2.0F, gWindowH / 2.0F, 0.0F);
-	wcRectFInitilize(&gRect, &origin, gWindowW / 4.0F, gWindowH / 4.0F);
-
-	wcEclipseInitialize(&gEclipse, 100, origin.x, origin.y,
-						gWindowW / 4.0F, gWindowH / 4.0F);
 }
 
 void main_destroy_func()
 {
-	wcEclipseDestroy(&gEclipse);
 }
 
 void main_reshape_func(int w, int h)
 {
 	glClearColor(1.0F, 1.0F, 1.0F, 0.0F);
+
+	gWindowSizeX = w;
+	gWindowSizeY = h;
 	
+	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(0, w, 0, h);
+	gluOrtho2D(0.0, (GLdouble)w, 0.0, (GLdouble)h);
 }
 
 void main_display_func()
 {
-	glClear(GL_COLOR_BUFFER_BIT);
-	glEnableClientState(GL_VERTEX_ARRAY);
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 
 	glColor4f(1.0F, 0.0F, 0.0F, 0.0F);
-	//cube_quad(&gCube, 2, 3, 7, 6);
-	//wcRectFDraw(&gRect);
-	wcEclipseDraw(&gEclipse);
+	glClear(GL_COLOR_BUFFER_BIT);
+
+	wcFillDraw();
 
 	glutSwapBuffers();
 }

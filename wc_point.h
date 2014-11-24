@@ -44,4 +44,11 @@ void SetWcPoint(Tp *ptr, Te x, Te y, Te z)
 	ptr->z = z;
 }
 
+template<typename Tp, typename Te>
+void setWcPoint(Tp *ptr, Te x, Te y, Te z)
+{
+	ptr->x = x;
+	ptr->y = y;
+	ptr->z = z;
+}
 #endif

@@ -14,4 +14,5 @@
 #define CMATH_PI	3.1415926
 #endif
 
+
 #endif //GL_BASIC_CONFIG_H
