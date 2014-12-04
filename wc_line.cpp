@@ -12,3 +12,11 @@ void wcDrawLine()
 		glVertex2f(250.0F, 250.0F);
 	glEnd();
 }
+
+void WcLine::Draw()
+{
+	glBegin(GL_LINES);
+		glVertex3fv(reinterpret_cast<GLfloat*>(&mPointFm));
+		glVertex3fv(reinterpret_cast<GLfloat*>(&mPointTo));
+	glEnd();
+}

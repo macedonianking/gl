@@ -4,11 +4,10 @@
 
 #include "main_application.h"
 #include "base_config.h"
-#include "cube.h"
-#include "wc_rect.h"
 #include "wc_eclipse.h"
 #include "wc_line.h"
-#include "wc_fill.h"
+#include "wc_color.h"
+#include "wc_rect.h"
 
 static struct main_entry_t gMainEntry;
 
@@ -17,17 +16,50 @@ static void main_display_func();
 static void main_reshape_func(int w, int h);
 static void main_destroy_func();
 
-#define VIEW_W	200	
-#define VIEW_H	400
+#define VIEW_W  800	
+#define VIEW_H  600	
 
 int					gWindowW;
 int					gWindowH;
-struct wc_cube_t	gCube;
-struct wcRectF		gRect;
-struct wcEclipse	gEclipse;
 
 static GLuint		gWindowSizeX;
 static GLuint		gWindowSizeY;
+
+class WcContext
+{
+public:
+	WcContext(GLsizei w, GLsizei h)
+		: mWidth(w),
+		  mHeight(h),
+		  mColor(WC_COLOR_RED)
+	{
+		GLsizei x, y;
+
+		x = w >> 1;
+		y = h >> 1;
+		mHoriLine.SetFmPoint(wcPt3f(-x, 0.0F));
+		mHoriLine.SetToPoint(wcPt3f(x, 0.0F));
+		mVertLine.SetFmPoint(wcPt3f(0.0F, -y));
+		mVertLine.SetToPoint(wcPt3f(0.0F, y));
+
+		mBound.SetXYWH(100.0F, 100.0F, 100.0F, 100.0F);
+	}
+
+	virtual ~WcContext();
+
+	virtual void Draw();
+
+private:
+	GLsizei			mWidth;
+	GLsizei			mHeight;
+	wcColor			mColor;
+	wcRectF			mBound;
+
+	WcLine			mVertLine;
+	WcLine			mHoriLine;
+};
+
+static struct WcContext *gContext = NULL;
 
 void QuadTestInitialize()
 {
@@ -56,15 +88,25 @@ void main_initial_func()
 
 	glClearColor(1.0F, 1.0F, 1.0F, 0.0F);
 
-	cube_initialize(&gCube,  100);
+	if (!gContext)
+	{
+		gContext = new WcContext(VIEW_W, VIEW_H);
+	}
 }
 
 void main_destroy_func()
 {
+	if (gContext)
+	{
+		delete gContext;
+		gContext = NULL;
+	}
 }
 
 void main_reshape_func(int w, int h)
 {
+	GLint l, t, r, b;
+
 	glClearColor(1.0F, 1.0F, 1.0F, 0.0F);
 
 	gWindowSizeX = w;
@@ -73,7 +115,12 @@ void main_reshape_func(int w, int h)
 	glViewport(0, 0, w, h);
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(0.0, (GLdouble)w, 0.0, (GLdouble)h);
+
+	l = - (w >> 1);
+	r = l + w;
+	b = - (h >> 1);
+	t = b + h;
+	gluOrtho2D(l, r, b, t);
 }
 
 void main_display_func()
@@ -84,7 +131,30 @@ void main_display_func()
 	glColor4f(1.0F, 0.0F, 0.0F, 0.0F);
 	glClear(GL_COLOR_BUFFER_BIT);
 
-	wcFillDraw();
+	if (gContext)
+	{
+		gContext->Draw();
+	}
 
 	glutSwapBuffers();
+}
+
+WcContext::~WcContext()
+{
+}
+
+void WcContext::Draw()
+{
+	glEnableClientState(GL_VERTEX_ARRAY);
+	glEnableClientState(GL_COLOR_ARRAY);
+
+	glColor3fv(reinterpret_cast<GLfloat*>(&mColor));	
+	glBegin(GL_POINTS);
+		glVertex3f(0.0F, 0.0F, 0.0F);
+	glEnd();
+
+	mVertLine.Draw();
+	mHoriLine.Draw();
+	
+	mBound.Draw(GL_POLYGON);
 }

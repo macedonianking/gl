@@ -9,11 +9,26 @@ struct wcPt2f
 	GLfloat y;
 };
 
-struct wcPt3f
+class wcPt3f
 {
+public:
 	GLfloat x;
 	GLfloat y;
 	GLfloat z;
+
+	wcPt3f()
+		: x(0.0F),
+		  y(0.0F),
+		  z(0.0F)
+	{
+	}
+
+	wcPt3f(GLfloat valueX, GLfloat valueY)
+		: x(valueX),
+		  y(valueY),
+		  z(0.0F)
+	{
+	}
 };
 
 struct wcPt2d
@@ -51,4 +66,5 @@ void setWcPoint(Tp *ptr, Te x, Te y, Te z)
 	ptr->y = y;
 	ptr->z = z;
 }
+
 #endif

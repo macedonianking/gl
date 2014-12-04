@@ -40,6 +40,8 @@
 				'wc_line.cpp',
 				'wc_fill.cpp',
 				'wc_fill.h',
+				'wc_matrix.cpp',
+				'wc_matrix.h',
 			],
 			'libraries': [
 				'-lGL',
