@@ -3,20 +3,69 @@
 
 #include "wc_point.h"
 
+#define IDENTITY_MATRIX3F	{ 1.0, 0.0, 0.0, \
+							  0.0, 1.0, 0.0, \
+							  0.0, 0.0, 1.0  }
+
 struct wcMatrix3f
 {
-	GLfloat	m[3][3];
+public:
+	GLfloat		mat[3][3];
 };
 
-extern wcMatrix3f gMatModelView;
+extern struct wcMatrix3f WC_MATRIX3F_IDENTITY;
 
-void wcMatrix3fSetIdentity(struct wcMatrix3f *mat);
-void wcMatrix3fPrevMultiply(struct wcMatrix3f *matPrev, struct wcMatrix3f * matPost);
-void wcMatrix3fPrevTranslate(GLfloat tx, GLfloat ty);
-void wcMatrix3fPrevRotate(GLfloat px, GLfloat py, GLfloat theta);
-void wcMatrix3fPrevScale(GLfloat px, GLfloat py, GLfloat sx, GLfloat sy);
+class GlMatrix3f
+{
+public:
+	GlMatrix3f(const struct wcMatrix3f *mat);
+	
+	operator GLfloat*() 
+	{
+		return &mMat.mat[0][0];
+	}
 
-void wcMatrix3fMap(const struct wcMatrix3f *mat, wcPt3f *src, GLsizei count,
-		wcPt3f *dst);
+private:
+	struct wcMatrix3f	mMat;
+};
+
+class Matrix3f
+{
+public:
+	Matrix3f();
+	Matrix3f(const struct wcMatrix3f *mat);
+
+	void SetMatrix(const wcMatrix3f *mat);
+
+	void PrevMultiply(const wcMatrix3f *mat);
+	void PrevTranslate(GLfloat tx, GLfloat ty, GLfloat tz);
+	void PrevScale(GLfloat sx, GLfloat sy);
+	void PrevScale(GLfloat px, GLfloat py, GLfloat sx, GLfloat sy);
+	void PrevRotate(GLfloat angle);
+	void PrevRotate(GLfloat angle, GLfloat px, GLfloat py);
+
+	operator const struct wcMatrix3f*() const
+	{
+		return &mMat;
+	}
+
+	operator struct wcMatrix3f*() 
+	{
+		return &mMat;
+	}
+
+private:
+	struct wcMatrix3f mMat;
+};
+
+void SetMatrix3fIdentity(struct wcMatrix3f *ptr);
+void SetMatrix3fTranslate(struct wcMatrix3f *ptr, GLfloat tx, GLfloat ty);
+void SetMatrix3fScale(struct wcMatrix3f *ptr, GLfloat sx, GLfloat sy);
+void SetMatrix3fScale(struct wcMatrix3f *ptr, GLfloat px, GLfloat py,
+					  GLfloat sx, GLfloat sy);
+void SetMatrix3fRotate(struct wcMatrix3f *ptr, GLfloat angle);
+void SetMatrix3fRotate(struct wcMatrix3f *ptr, GLfloat angle, 
+					   GLfloat px, GLfloat py);
+struct wcMatrix3f wcMatrix3fMulitply();
 
 #endif

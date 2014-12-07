@@ -38,25 +38,22 @@ public:
 		  a(a)	  
 	{
 	}
+
+	void Set(GLfloat r, GLfloat g, GLfloat b)
+	{
+		this->r = r;
+		this->g = g;
+		this->b = b;
+		this->a = 1.0F;
+	}
+
+	void Set(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
+	{
+		this->r = r;
+		this->g = g;
+		this->b = b;
+		this->a = a;
+	}
 };
-
-static struct wcColor getWcColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
-{
-	struct wcColor color;
-	color.r = r;
-	color.g = g;
-	color.b = b;
-	color.a = a;
-	return color;
-}
-
-static void setWcColor(struct wcColor* ptr, GLfloat r, GLfloat g, GLfloat b,
-					   GLfloat a)
-{
-	ptr->r = r;
-	ptr->g = g;
-	ptr->b = b;
-	ptr->a = a;
-}
 
 #endif

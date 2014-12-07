@@ -15,14 +15,14 @@ static void checkInitialize()
 		return;	
 	}
 
-	setWcPoint(&gTriangleVertices[0], 50.0F, 50.0F, 0.0F);
-	setWcPoint(&gTriangleVertices[1], 150.0F, 50.0F, 0.0F);
-	setWcPoint(&gTriangleVertices[2], 150.0F, 150.0F, 0.0F);
-	setWcPoint(&gTriangleVertices[3], 50.0F, 150.0F, 0.0F);
-	setWcColor(&gTriangleColors[0], 0.0F, 0.0F, 1.0F, 0.0F);
-	setWcColor(&gTriangleColors[1], 1.0F, 0.0F, 0.0F, 0.0F);
-	setWcColor(&gTriangleColors[2], 0.0F, 1.0F, 0.0F, 0.0F);
-	setWcColor(&gTriangleColors[4], 1.0F, 1.0F, 0.0F, 0.0F);
+	gTriangleVertices[0].Set(50.0F, 50.0F, 0.0F);
+	gTriangleVertices[1].Set(150.0F, 50.0F, 0.0F);
+	gTriangleVertices[2].Set(150.0F, 150.0F, 0.0F);
+	gTriangleVertices[3].Set(50.0F, 150.0F, 0.0F);
+	gTriangleColors[0].Set(0.0F, 0.0F, 1.0F, 0.0F);
+	gTriangleColors[1].Set(1.0F, 0.0F, 0.0F, 0.0F);
+	gTriangleColors[2].Set(0.0F, 1.0F, 0.0F, 0.0F);
+	gTriangleColors[3].Set(1.0F, 1.0F, 0.0F, 0.0F);
 	
 	gInitialized = true;
 }

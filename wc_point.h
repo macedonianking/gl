@@ -3,8 +3,28 @@
 
 #include "base_config.h"
 
-struct wcPt2f
+class wcPt2f
 {
+public:
+	wcPt2f()
+		:x(0.0F),
+		 y(0.0F)
+	{
+	}
+
+	wcPt2f(GLfloat vx, GLfloat vy)
+		:x(vx),
+		 y(vy)
+	{
+	}
+
+	void Set(GLfloat x, GLfloat y)
+	{
+		this->x = x;
+		this->y = y;
+	}
+
+public:
 	GLfloat	x;
 	GLfloat y;
 };
@@ -12,10 +32,6 @@ struct wcPt2f
 class wcPt3f
 {
 public:
-	GLfloat x;
-	GLfloat y;
-	GLfloat z;
-
 	wcPt3f()
 		: x(0.0F),
 		  y(0.0F),
@@ -29,42 +45,52 @@ public:
 		  z(0.0F)
 	{
 	}
+
+	void Set(GLfloat x, GLfloat y, GLfloat z)
+	{
+		this->x = x;
+		this->y = y;
+		this->z = z;
+	}
+
+public:
+	GLfloat x;
+	GLfloat y;
+	GLfloat z;
 };
 
-struct wcPt2d
+class wcPt2d
 {
+public:
+	wcPt2d()
+		:x(0.0),
+		 y(0.0)
+	{
+	}
+
+	wcPt2d(GLdouble x, GLdouble y, GLdouble z) :
+		x(x),
+		y(y)
+	{
+	}
+
+	void Set()
+	{
+		this->x = x;
+		this->y = y;
+	}
+
+public:
 	GLdouble	x;
 	GLdouble	y;
 };
 
 struct wcPt3d
 {
+public:
 	GLdouble	x;
 	GLdouble	y;
 	GLdouble	z;
 };
-
-template<typename Tp, typename Te>
-void SetWcPoint(Tp *ptr, Te x, Te y)
-{
-	ptr->x = x;
-	ptr->y = y;
-}
-
-template<typename Tp, typename Te>
-void SetWcPoint(Tp *ptr, Te x, Te y, Te z)
-{
-	ptr->x = x;
-	ptr->y = y;
-	ptr->z = z;
-}
-
-template<typename Tp, typename Te>
-void setWcPoint(Tp *ptr, Te x, Te y, Te z)
-{
-	ptr->x = x;
-	ptr->y = y;
-	ptr->z = z;
-}
 
 #endif

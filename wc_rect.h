@@ -80,6 +80,16 @@ public:
 		return t - b;
 	}
 
+	GLfloat GetCenterX() const
+	{
+		return (l + r) / 2.0F;
+	}
+
+	GLfloat GetCenterY() const
+	{
+		return (b + t) / 2.0F;
+	}
+
 	void Draw(GLenum mode);
 
 	static wcRectF FromXYWH(GLfloat x, GLfloat y, GLfloat w, GLfloat h);

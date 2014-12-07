@@ -2,14 +2,14 @@
 
 void cube_initialize(struct wc_cube_t *ptr, int n)
 {
-	SetWcPoint(ptr->buffer + 0, 0, 0, 0);	
-	SetWcPoint(ptr->buffer + 1, n, 0, 0);
-	SetWcPoint(ptr->buffer + 2, 0, 0, n);
-	SetWcPoint(ptr->buffer + 3, n, 0, n);
-	SetWcPoint(ptr->buffer + 4, 0, n, 0);
-	SetWcPoint(ptr->buffer + 5, n, n, 0);
-	SetWcPoint(ptr->buffer + 6, 0, n, n);
-	SetWcPoint(ptr->buffer + 7, n, n, n);
+	ptr->buffer[0].Set(0, 0, 0);	
+	ptr->buffer[1].Set(n, 0, 0);
+	ptr->buffer[2].Set(0, 0, n);
+	ptr->buffer[3].Set(n, 0, n);
+	ptr->buffer[4].Set(0, n, 0);
+	ptr->buffer[5].Set(n, n, 0);
+	ptr->buffer[6].Set(0, n, n);
+	ptr->buffer[7].Set(n, n, n);
 }	
 
 void cube_quad(const struct wc_cube_t *ptr,

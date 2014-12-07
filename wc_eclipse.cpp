@@ -21,7 +21,7 @@ void wcEclipseInitialize(struct wcEclipse *ptr, int size,
 	for (int i = 0; i < size; ++i)
 	{
 		radian = 2 * CMATH_PI * i / (double)size;
-		SetWcPoint(ptr->buffer + i,
+		ptr->buffer[i].Set(
 				   ptr->px + ptr->sizeX * cos(radian),
 				   ptr->py + ptr->sizeY * sin(radian),
 				   0.0);

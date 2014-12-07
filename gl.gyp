@@ -28,6 +28,7 @@
 				'quad_test.cpp',
 				'cube.cpp',
 				'cube.h',
+				'wc_math.h',
 				'wc_rect.cpp',
 				'wc_rect.h',
 				'wc_eclipse.cpp',

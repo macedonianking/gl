@@ -156,5 +156,10 @@ void WcContext::Draw()
 	mVertLine.Draw();
 	mHoriLine.Draw();
 	
+	glPushMatrix();
+	glTranslatef(-mBound.GetCenterX(), -mBound.GetCenterY(), 0.0F);
+	glRotatef(45.0F, 0.0F, 0.0F, 1.0F);
+	glTranslatef(mBound.GetCenterX(), mBound.GetCenterY(), 0.0F);
 	mBound.Draw(GL_POLYGON);
+	glPopMatrix();
 }

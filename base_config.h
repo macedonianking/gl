@@ -1,7 +1,6 @@
 #ifndef GL_BASIC_CONFIG_H
 #define GL_BASIC_CONFIG_H
 
-#include <stdint.h>
 #include <stdio.h>
 #include <stdlib.h>
 #include <iostream>
