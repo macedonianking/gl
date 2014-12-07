@@ -33,19 +33,12 @@ public:
 		  mHeight(h),
 		  mColor(WC_COLOR_RED)
 	{
-		GLsizei x, y;
-
-		x = w >> 1;
-		y = h >> 1;
-		mHoriLine.SetFmPoint(wcPt3f(-x, 0.0F));
-		mHoriLine.SetToPoint(wcPt3f(x, 0.0F));
-		mVertLine.SetFmPoint(wcPt3f(0.0F, -y));
-		mVertLine.SetToPoint(wcPt3f(0.0F, y));
-
-		mBound.SetXYWH(100.0F, 100.0F, 100.0F, 100.0F);
+		SetWindowSize(w, h);
 	}
 
 	virtual ~WcContext();
+
+	void SetWindowSize(size_t w, size_t h);
 
 	virtual void Draw();
 
@@ -121,6 +114,14 @@ void main_reshape_func(int w, int h)
 	b = - (h >> 1);
 	t = b + h;
 	gluOrtho2D(l, r, b, t);
+	if (gContext == NULL)
+	{
+		gContext = new WcContext(w, h);
+	}
+	else
+	{
+		gContext->SetWindowSize(w, h);
+	}
 }
 
 void main_display_func()
@@ -141,6 +142,23 @@ void main_display_func()
 
 WcContext::~WcContext()
 {
+}
+
+void WcContext::SetWindowSize(size_t w, size_t h)
+{
+	GLsizei x, y;
+
+	this->mWidth = w;
+	this->mHeight = h;
+
+	x = w >> 1;
+	y = h >> 1;
+	mHoriLine.SetFmPoint(wcPt3f(-x, 0.0F));
+	mHoriLine.SetToPoint(wcPt3f(x, 0.0F));
+	mVertLine.SetFmPoint(wcPt3f(0.0F, -y));
+	mVertLine.SetToPoint(wcPt3f(0.0F, y));
+
+	mBound.SetXYWH(100.0F, 100.0F, 100.0F, 100.0F);
 }
 
 void WcContext::Draw()

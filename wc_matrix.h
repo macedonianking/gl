@@ -38,7 +38,7 @@ public:
 	void SetMatrix(const wcMatrix3f *mat);
 
 	void PrevMultiply(const wcMatrix3f *mat);
-	void PrevTranslate(GLfloat tx, GLfloat ty, GLfloat tz);
+	void PrevTranslate(GLfloat tx, GLfloat ty);
 	void PrevScale(GLfloat sx, GLfloat sy);
 	void PrevScale(GLfloat px, GLfloat py, GLfloat sx, GLfloat sy);
 	void PrevRotate(GLfloat angle);
@@ -66,6 +66,7 @@ void SetMatrix3fScale(struct wcMatrix3f *ptr, GLfloat px, GLfloat py,
 void SetMatrix3fRotate(struct wcMatrix3f *ptr, GLfloat angle);
 void SetMatrix3fRotate(struct wcMatrix3f *ptr, GLfloat angle, 
 					   GLfloat px, GLfloat py);
-struct wcMatrix3f wcMatrix3fMulitply();
+struct wcMatrix3f wcMatrix3fMulitply(struct wcMatrix3f *prev,
+									 struct wcMatrix3f *next);
 
 #endif
