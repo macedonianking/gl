@@ -69,7 +69,7 @@ static inline void wc_list_draw(struct wc_list_t *ptr)
 		if (NULL == ptr->call_list)
 		{
 			ptr->call_list = (GLuint*) malloc(ptr->size * sizeof(GLuint));
-			for (GLuint i = 0; i < ptr->size; ++i)
+			for (GLuint i = 0; i < (GLuint)ptr->size; ++i)
 			{
 				ptr->call_list[i] = i;	
 			}

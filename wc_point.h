@@ -118,4 +118,59 @@ public:
 	GLdouble	z;
 };
 
+template<typename Tp>
+class WcPoint4T
+{
+public:
+	WcPoint4T() :
+		x(0),
+		y(0),
+		z(0),
+		w(1)
+	{
+	}
+
+	WcPoint4T(Tp vx, Tp vy) : 
+		x(vx),
+		y(vy), 
+		z(0),
+		w(1)
+	{
+	}
+
+	WcPoint4T(Tp vx, Tp vy, Tp vz) : 
+		x(vx),
+		y(vy),
+		z(vz),
+		w(1)
+	{
+	}
+
+	WcPoint4T(Tp vx, Tp vy, Tp vz, Tp vw) :
+		x(vx),
+		y(vy),
+		z(vz),
+		w(vw)
+	{
+	}
+
+	Tp *GetGlPointer()
+	{
+		return &x;
+	}
+
+	const Tp *GetGlPointer() const
+	{
+		return &x;
+	}
+public:
+	Tp	x;
+	Tp	y;
+	Tp	z;
+	Tp	w;
+};
+
+typedef WcPoint4T<GLfloat>	WcPoint4f;
+typedef WcPoint4T<GLdouble>	WcPoint4d;
+
 #endif

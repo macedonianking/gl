@@ -3,32 +3,67 @@
 
 #include "wc_point.h"
 
-class WcTriangle
+template<typename Tp>
+class WcTriangleT
 {
 public:
-	WcTriangle();
+	typedef	WcPoint4T<Tp>	Point;
 
-	WcTriangle(const wcPt3f &pt0,
-			   const wcPt3f &pt1,
-			   const wcPt3f &pt2);
+	WcTriangleT();
+	WcTriangleT(const Point &pt0,
+			    const Point &pt1,
+			    const Point &pt2);
 
-	const GLfloat *GetGlPointer() const
+	const Tp *GetGlPointer() const
 	{
 		return mBuffer[0].GetGlPointer();
 	}
 
-	GLfloat *GetGlPointer()
+	Tp *GetGlPointer()
 	{
 		return mBuffer[0].GetGlPointer();
 	}
 
-	void SetPoints(const wcPt3f &pt0,
-				   const wcPt3f &pt1,
-				   const wcPt3f &pt2);
+	void SetPoints(const Point &pt0,
+				   const Point &pt1,
+				   const Point &pt2);
 
 	void Draw();
 private:
-	wcPt3f	mBuffer[3];	
+	Point	mBuffer[3];	
 };
+
+template<typename Tp>
+WcTriangleT<Tp>::WcTriangleT()
+{
+}
+
+template<typename Tp>
+WcTriangleT<Tp>::WcTriangleT(const Point &pt0, 
+							 const Point &pt1,
+							 const Point &pt2)
+{
+	this->mBuffer[0] = pt0;
+	this->mBuffer[1] = pt1;
+	this->mBuffer[2] = pt2;
+}
+
+template<typename Tp>
+void WcTriangleT<Tp>::SetPoints(const Point &pt0, 
+								const Point &pt1,
+								const Point &pt2)
+{
+	this->mBuffer[0] = pt0;
+	this->mBuffer[1] = pt1;
+	this->mBuffer[2] = pt2;
+}
+
+template<typename Tp>
+void WcTriangleT<Tp>::Draw()
+{
+}
+
+typedef WcTriangleT<GLfloat>	WcTrianglef;
+typedef WcTriangleT<GLdouble>	WcTriangled;
 
 #endif // WC_TRIANGLE_H

@@ -88,6 +88,45 @@ private:
 	struct wcMatrix3f mMat;
 };
 
+template<typename Tp>
+class WcMatrix4T
+{
+public:
+	WcMatrix4T();
+	WcMatrix4T(const Tp* mat);
+
+	class GlMatrix
+	{
+	public:
+		operator Tp*()
+		{
+			return &mMat[0][0];
+		}
+
+		operator const Tp*() const
+		{
+			return &mMat[0][0];
+		}
+	private:
+		GlMatrix(const WcMatrix4T &mat);
+	private:
+		Tp mMat[4][4];
+	};
+
+	void SetIdentity();
+	void SetTranslate(Tp tx, Tp ty, Tp tz);
+
+	std::string ToString() const;
+
+	friend class GlMatrix;
+private:
+	Tp	mMat[4][4];
+};
+
+typedef WcMatrix4T<GLfloat>		WcMatrix4f;
+typedef WcMatrix4T<GLdouble>	WcMatrix4d;
+
+
 void SetMatrix3fIdentity(struct wcMatrix3f *ptr);
 void SetMatrix3fTranslate(struct wcMatrix3f *ptr, GLfloat tx, GLfloat ty);
 void SetMatrix3fScale(struct wcMatrix3f *ptr, GLfloat sx, GLfloat sy);

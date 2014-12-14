@@ -27,34 +27,7 @@ static void checkInitialize()
 	gInitialized = true;
 }
 
-static void wcDrawTriangleLine()
-{
-	glShadeModel(GL_FLAT);
-	glPolygonMode(GL_FRONT, GL_LINE);
-	glBegin(GL_POLYGON);
-		for (int i = 0; i != 4; ++i)
-		{
-			glVertex3fv(reinterpret_cast<GLfloat*>(&gTriangleVertices[i]));
-		}
-	glEnd();
-}
-
-static void wcDrawTriangleFill()
-{
-	glShadeModel(GL_SMOOTH);
-	glPolygonMode(GL_FRONT, GL_FILL);
-	glBegin(GL_POLYGON);
-		for (int i = 0; i != 4; ++i)
-		{
-			glColor4fv(reinterpret_cast<GLfloat*>(&gTriangleColors[i]));
-			glVertex3fv(reinterpret_cast<GLfloat*>(&gTriangleVertices[i]));
-		}
-	glEnd();
-}
-
 void wcFillDraw()
 {
 	checkInitialize();
-
-	wcDrawTriangleLine();	
 }

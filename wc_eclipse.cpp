@@ -30,8 +30,6 @@ void wcEclipseInitialize(struct wcEclipse *ptr, int size,
 
 void wcEclipseDraw(struct wcEclipse *ptr)
 {
-	GLenum error;
-
 	glEnableClientState(GL_VERTEX_ARRAY);
 
 	if (ptr->indexPtr == NULL)
