@@ -21,11 +21,11 @@ int main(int argc, char **argv)
 	glutInitWindowPosition(ptr->mWindowPointX, ptr->mWindowPointY);
 	glutInitWindowSize(ptr->mWindowSizeX, ptr->mWindowSizeY);
 
+	ptr->mInitialFunc();
 	glutCreateWindow(ptr->mWindowTitle);
 	glutDisplayFunc(ptr->mDisplayFunc);
 	glutReshapeFunc(ptr->mReshapeFunc);
 
-	ptr->mInitialFunc();
 	glutMainLoop();
 	ptr->mDestroyFunc();
 	

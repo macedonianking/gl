@@ -33,6 +33,8 @@
 				'wc_rect.h',
 				'wc_eclipse.cpp',
 				'wc_eclipse.h',
+				'wc_triangle.cpp',
+				'wc_triangle.h',
 				'wc_bitmap.cpp',
 				'wc_bitmap.h',
 				'wc_list.h',

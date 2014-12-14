@@ -3,30 +3,58 @@
 
 #include "wc_point.h"
 
-#define IDENTITY_MATRIX3F	{ 1.0, 0.0, 0.0, \
-							  0.0, 1.0, 0.0, \
-							  0.0, 0.0, 1.0  }
+#include <string>
 
-struct wcMatrix3f
+class wcMatrix3f
 {
 public:
+	wcMatrix3f();
+	wcMatrix3f(const GLfloat *ptr);
+
+	void SetTranslate(GLfloat tx, GLfloat ty);
+	void SetScale(GLfloat sx, GLfloat sy);
+	void SetScale(GLfloat px, GLfloat py, GLfloat sx, GLfloat sy);
+	void SetRotate(GLfloat angle);
+	void SetRotate(GLfloat angle, GLfloat px, GLfloat py);
+
+	wcMatrix3f	Transpose() const;
+	void		SetIdentity();
+	std::string ToString() const;
+
+	void PrevMultiply(const wcMatrix3f &rhs);
+
 	GLfloat		mat[3][3];
+};
+
+class wcMatrix4f
+{
+public:
+	wcMatrix4f();
+	wcMatrix4f(const GLfloat *ptr);
+	wcMatrix4f(const wcMatrix3f& mat3);
+
+
+	wcMatrix4f	Transpose() const;
+	void		SetIdentity();
+	std::string ToString() const;
+
+	GLfloat		mat[4][4];
 };
 
 extern struct wcMatrix3f WC_MATRIX3F_IDENTITY;
 
-class GlMatrix3f
+class GlMatrix4f
 {
 public:
-	GlMatrix3f(const struct wcMatrix3f *mat);
-	
-	operator GLfloat*() 
-	{
-		return &mMat.mat[0][0];
-	}
+	GlMatrix4f();
+	GlMatrix4f(const wcMatrix3f *mat);
+	GlMatrix4f(const wcMatrix4f *mat);
+
+	operator GLfloat*();
+	operator const GLfloat*() const;
 
 private:
-	struct wcMatrix3f	mMat;
+	wcMatrix4f	mMat;
 };
 
 class Matrix3f
@@ -43,6 +71,8 @@ public:
 	void PrevScale(GLfloat px, GLfloat py, GLfloat sx, GLfloat sy);
 	void PrevRotate(GLfloat angle);
 	void PrevRotate(GLfloat angle, GLfloat px, GLfloat py);
+	
+	const GlMatrix4f GetGlMatrix() const;
 
 	operator const struct wcMatrix3f*() const
 	{

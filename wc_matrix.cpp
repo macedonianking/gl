@@ -2,24 +2,205 @@
 
 #include <memory.h>
 
+#include <sstream>
+
 #include "wc_math.h"
 
+wcMatrix3f::wcMatrix3f()
+{
+	for (int r = 0; r != 3; ++r)
+	{
+		for (int c = 0; c !=3; ++c)
+		{
+			this->mat[r][c] = r != c ? 0.0F : 1.0F;
+		}
+	}
+}
 
-struct wcMatrix3f WC_MATRIX3F_IDENTITY = IDENTITY_MATRIX3F;
+wcMatrix3f::wcMatrix3f(const GLfloat *ptr)
+{
+	memcpy(&this->mat[0][0], ptr, 9 * sizeof(GLfloat));
+}
 
-GlMatrix3f::GlMatrix3f(const struct wcMatrix3f *ptr)
+void wcMatrix3f::SetTranslate(GLfloat tx, GLfloat ty)
+{
+	this->SetIdentity();
+	this->mat[0][2] = tx;
+	this->mat[1][2] = ty;
+}
+
+void wcMatrix3f::SetScale(GLfloat sx, GLfloat sy)
+{
+	this->SetIdentity();
+	this->mat[0][0] = sx;
+	this->mat[1][1] = sy;
+}
+
+void wcMatrix3f::SetScale(GLfloat px, GLfloat py, GLfloat sx, GLfloat sy)
+{
+	this->SetIdentity();
+
+	this->mat[0][0] = sx;
+	this->mat[1][1] = sy;
+	this->mat[0][2] = px * (1 - sx);
+	this->mat[1][2] = py * (1 - sy);
+}
+
+void wcMatrix3f::SetRotate(GLfloat angle)
+{
+	this->SetRotate(angle, 0.0F, 0.0F);
+}
+
+void wcMatrix3f::SetRotate(GLfloat angle, GLfloat px, GLfloat py)
+{
+	double radian = ToRadian(angle);
+
+	this->mat[0][0] = cos(radian);
+	this->mat[0][1] = -sin(radian);
+	this->mat[0][2] = px * (1 - cos(radian)) + py * sin(radian);
+	this->mat[1][0] = sin(radian);
+	this->mat[1][1] = cos(radian);
+	this->mat[1][2] = py * (1 - cos(radian)) - px * sin(radian);
+}
+
+void wcMatrix3f::SetIdentity()
+{
+	for (int r = 0; r != 3; ++r)
+	{
+		for (int c = 0; c !=3; ++c)
+		{
+			this->mat[r][c] = r != c ? 0.0F : 1.0F;
+		}
+	}
+}
+
+wcMatrix3f wcMatrix3f::Transpose() const
+{
+	wcMatrix3f mat;
+
+	for (int r = 0; r != 3; ++r)
+	{
+		for (int c = 0; c != 3; ++c)
+		{
+			mat.mat[c][r] = this->mat[r][c];	
+		}
+	}
+
+	return mat;
+}
+
+std::string wcMatrix3f::ToString() const
+{
+	std::stringstream out;
+
+	out << "[";
+	for (int r = 0; r != 3; ++r)
+	{
+		for (int c = 0; c != 3; ++c)
+		{
+			if (r != 0 || c != 0)
+			{
+				out << ", ";
+			}
+			out << this->mat[r][c];
+		}
+	}	
+	out << "]";
+	return out.str();	
+}
+
+wcMatrix4f::wcMatrix4f()
+{
+	for (int r = 0; r != 4; ++r)
+	{
+		for (int c = 0; c != 4; ++c)
+		{
+			this->mat[r][c] = r != c ? 0.0F : 1.0F; 
+		}
+	}
+}
+
+wcMatrix4f::wcMatrix4f(const GLfloat *ptr)
+{
+	memcpy(&this->mat[0][0], ptr, sizeof(GLfloat) * 16);	
+}
+
+wcMatrix4f::wcMatrix4f(const wcMatrix3f &mat)
 {
 	for (int r = 0; r != 3; ++r)
 	{
 		for (int c = 0; c != 3; ++c)
 		{
-			mMat.mat[r][c] = ptr->mat[c][r];
+			this->mat[r][c] = mat.mat[r][c];
+		}
+	}
+
+	for (int c = 0; c != 3; ++c)
+	{
+		this->mat[3][c] = 0.0F;
+	}
+
+	for (int r = 0; r != 3; ++r)
+	{
+		this->mat[r][3] = 0.0F;
+	}
+	this->mat[3][3] = 1.0F;
+}
+
+void wcMatrix4f::SetIdentity()
+{
+	for (int r = 0; r != 4; ++r)
+	{
+		for (int c = 0; c != 4; ++c)
+		{
+			this->mat[r][c] = r != c ? 0.0F : 1.0F; 
 		}
 	}
 }
 
+wcMatrix4f wcMatrix4f::Transpose() const
+{
+	wcMatrix4f mat;
+
+	for (int r = 0; r != 4; ++r)
+	{
+		for (int c = 0; c != 4; ++c)
+		{
+			mat.mat[r][c] = this->mat[c][r];
+		}
+	}
+
+	return mat;
+}
+
+std::string wcMatrix4f::ToString() const
+{
+	std::stringstream out;
+	out << "[";
+	for (int r = 0; r != 4; ++r)
+	{
+		for (int c = 0; c != 4; ++c)
+		{
+			if (r != 0 || c != 0)
+				out << ", ";
+			out << this->mat[r][c];
+		}
+	}
+	out << "]";
+	return out.str();
+}
+
+GlMatrix4f::GlMatrix4f(const struct wcMatrix3f *ptr)
+	: mMat(ptr->Transpose())
+{
+}
+
+GlMatrix4f::GlMatrix4f(const wcMatrix4f *ptr)
+	: mMat(ptr->Transpose())
+{
+}
+
 Matrix3f::Matrix3f()
-	: mMat(WC_MATRIX3F_IDENTITY)
 {
 }
 
@@ -76,15 +257,21 @@ void Matrix3f::PrevRotate(GLfloat angle, GLfloat px, GLfloat py)
 	this->mMat = wcMatrix3fMulitply(&m, &this->mMat);
 }
 
+const GlMatrix4f Matrix3f::GetGlMatrix() const
+{
+	return GlMatrix4f(&this->mMat);
+}
+
+
 void SetMatrix3fIdentity(struct wcMatrix3f *mat)
 {
-	*mat = WC_MATRIX3F_IDENTITY;
+	mat->SetIdentity();
 }
 
 void SetMatrix3fTranslate(struct wcMatrix3f *mat,
 						  GLfloat tx, GLfloat ty)
 {
-	*mat = WC_MATRIX3F_IDENTITY;
+	mat->SetIdentity();
 
 	mat->mat[0][2] = tx;
 	mat->mat[1][2] = ty;
@@ -92,7 +279,8 @@ void SetMatrix3fTranslate(struct wcMatrix3f *mat,
 
 void SetMatrix3fScale(struct wcMatrix3f *mat, GLfloat sx, GLfloat sy)
 {
-	*mat = WC_MATRIX3F_IDENTITY;
+	mat->SetIdentity();
+
 	mat->mat[0][0] = sx;
 	mat->mat[1][1] = sy;
 }
@@ -100,7 +288,8 @@ void SetMatrix3fScale(struct wcMatrix3f *mat, GLfloat sx, GLfloat sy)
 void SetMatrix3fScale(struct wcMatrix3f *mat, GLfloat px, GLfloat py,
 					  GLfloat sx, GLfloat sy)
 {
-	*mat = WC_MATRIX3F_IDENTITY;
+	mat->SetIdentity();
+
 	mat->mat[0][0] = sx;
 	mat->mat[1][1] = sy;
 	mat->mat[0][2] = px * (1 - sx);
@@ -128,7 +317,7 @@ void SetMatrix3fRotate(struct wcMatrix3f *mat, GLfloat angle,
 struct wcMatrix3f wcMatrix3fMulitply(struct wcMatrix3f *prev,
 								   struct wcMatrix3f *next)
 {
-	struct wcMatrix3f m = WC_MATRIX3F_IDENTITY;
+	wcMatrix3f m;
 
 	for (int r = 0; r != 3; ++r)
 	{

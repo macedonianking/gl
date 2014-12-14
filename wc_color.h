@@ -54,6 +54,16 @@ public:
 		this->b = b;
 		this->a = a;
 	}
+
+	const GLfloat *GetGlPointer() const
+	{
+		return &r;	
+	}
+
+	GLfloat *GetGlPointer()
+	{
+		return &r;
+	}
 };
 
 #endif

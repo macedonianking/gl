@@ -8,6 +8,8 @@
 #include "wc_line.h"
 #include "wc_color.h"
 #include "wc_rect.h"
+#include "wc_triangle.h"
+#include "wc_matrix.h"
 
 static struct main_entry_t gMainEntry;
 
@@ -16,8 +18,8 @@ static void main_display_func();
 static void main_reshape_func(int w, int h);
 static void main_destroy_func();
 
-#define VIEW_W  800	
-#define VIEW_H  600	
+#define VIEW_W  600
+#define VIEW_H	300 
 
 int					gWindowW;
 int					gWindowH;
@@ -29,27 +31,26 @@ class WcContext
 {
 public:
 	WcContext(GLsizei w, GLsizei h)
-		: mWidth(w),
-		  mHeight(h),
-		  mColor(WC_COLOR_RED)
+		: mWindowW(w),
+		  mWindowH(h)
 	{
 		SetWindowSize(w, h);
+		mTriangle.SetPoints(wcPt3f(-50.0F, -25.0F),
+							wcPt3f(50.0F, -25.0F),
+							wcPt3f(0.0F, 25.0F));
 	}
 
-	virtual ~WcContext();
+	~WcContext();
 
 	void SetWindowSize(size_t w, size_t h);
-
-	virtual void Draw();
-
+	void Draw();
 private:
-	GLsizei			mWidth;
-	GLsizei			mHeight;
-	wcColor			mColor;
-	wcRectF			mBound;
+	void DrawTriangle(GLint x, GLint y, GLint w, GLint h,
+					  const wcColor &color, GLfloat zAngle);
 
-	WcLine			mVertLine;
-	WcLine			mHoriLine;
+	GLsizei		mWindowW;
+	GLsizei		mWindowH;
+	WcTriangle	mTriangle;
 };
 
 static struct WcContext *gContext = NULL;
@@ -77,11 +78,7 @@ void QuadTestInitialize()
 
 void main_initial_func()
 {
-	wcPt3f origin;
-
-	glClearColor(1.0F, 1.0F, 1.0F, 0.0F);
-
-	if (!gContext)
+	if (gContext == NULL)
 	{
 		gContext = new WcContext(VIEW_W, VIEW_H);
 	}
@@ -98,27 +95,7 @@ void main_destroy_func()
 
 void main_reshape_func(int w, int h)
 {
-	GLint l, t, r, b;
-
-	glClearColor(1.0F, 1.0F, 1.0F, 0.0F);
-
-	gWindowSizeX = w;
-	gWindowSizeY = h;
-	
-	glViewport(0, 0, w, h);
-	glMatrixMode(GL_PROJECTION);
-	glLoadIdentity();
-
-	l = - (w >> 1);
-	r = l + w;
-	b = - (h >> 1);
-	t = b + h;
-	gluOrtho2D(l, r, b, t);
-	if (gContext == NULL)
-	{
-		gContext = new WcContext(w, h);
-	}
-	else
+	if (gContext != NULL)
 	{
 		gContext->SetWindowSize(w, h);
 	}
@@ -126,18 +103,10 @@ void main_reshape_func(int w, int h)
 
 void main_display_func()
 {
-	glMatrixMode(GL_MODELVIEW);
-	glLoadIdentity();
-
-	glColor4f(1.0F, 0.0F, 0.0F, 0.0F);
-	glClear(GL_COLOR_BUFFER_BIT);
-
 	if (gContext)
 	{
 		gContext->Draw();
 	}
-
-	glutSwapBuffers();
 }
 
 WcContext::~WcContext()
@@ -146,38 +115,38 @@ WcContext::~WcContext()
 
 void WcContext::SetWindowSize(size_t w, size_t h)
 {
-	GLsizei x, y;
-
-	this->mWidth = w;
-	this->mHeight = h;
-
-	x = w >> 1;
-	y = h >> 1;
-	mHoriLine.SetFmPoint(wcPt3f(-x, 0.0F));
-	mHoriLine.SetToPoint(wcPt3f(x, 0.0F));
-	mVertLine.SetFmPoint(wcPt3f(0.0F, -y));
-	mVertLine.SetToPoint(wcPt3f(0.0F, y));
-
-	mBound.SetXYWH(100.0F, 100.0F, 100.0F, 100.0F);
+	this->mWindowW = w;
+	this->mWindowH = h;
 }
 
 void WcContext::Draw()
 {
+	glClearColor(1.0F, 1.0F, 1.0F, 0.0F);
+	glClearDepth(0.0F);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
 	glEnableClientState(GL_VERTEX_ARRAY);
 	glEnableClientState(GL_COLOR_ARRAY);
+	this->DrawTriangle(0, 0, 300, 300, WC_COLOR_RED, 0.0F);
+	this->DrawTriangle(300, 0, 300, 300, WC_COLOR_BLUE, 90.0F);
 
-	glColor3fv(reinterpret_cast<GLfloat*>(&mColor));	
-	glBegin(GL_POINTS);
-		glVertex3f(0.0F, 0.0F, 0.0F);
-	glEnd();
+	glutSwapBuffers();
+}
 
-	mVertLine.Draw();
-	mHoriLine.Draw();
-	
+void WcContext::DrawTriangle(GLint x, GLint y, GLint w, GLint h,
+							const wcColor &color, GLfloat zAngle)
+{
+	glMatrixMode(GL_PROJECTION);
+	glLoadIdentity();
+	gluOrtho2D(-100, 100, -100, 100);
+
+	glColor4fv(color.GetGlPointer());
+	glViewport(x, y, w, h);
+
+	glMatrixMode(GL_MODELVIEW);
+	glLoadIdentity();
 	glPushMatrix();
-	glTranslatef(-mBound.GetCenterX(), -mBound.GetCenterY(), 0.0F);
-	glRotatef(45.0F, 0.0F, 0.0F, 1.0F);
-	glTranslatef(mBound.GetCenterX(), mBound.GetCenterY(), 0.0F);
-	mBound.Draw(GL_POLYGON);
+	glRotatef(zAngle, 0.0F, 0.0F, 1.0F);
+	mTriangle.Draw();
 	glPopMatrix();
 }

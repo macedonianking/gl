@@ -24,6 +24,15 @@ public:
 		this->y = y;
 	}
 
+	const GLfloat *GetGlPointer() const
+	{
+		return &x;
+	}
+
+	GLfloat *GetGlPointer()
+	{
+		return &x;
+	}
 public:
 	GLfloat	x;
 	GLfloat y;
@@ -39,10 +48,17 @@ public:
 	{
 	}
 
-	wcPt3f(GLfloat valueX, GLfloat valueY)
+	wcPt3f(GLfloat valueX, GLfloat valueY):
+		x(valueX),
+		y(valueY),
+		z(0.0F)
+	{
+	}
+
+	wcPt3f(GLfloat valueX, GLfloat valueY, GLfloat valueZ)
 		: x(valueX),
 		  y(valueY),
-		  z(0.0F)
+		  z(valueZ)
 	{
 	}
 
@@ -53,6 +69,15 @@ public:
 		this->z = z;
 	}
 
+	const GLfloat *GetGlPointer() const
+	{
+		return &x;
+	}
+
+	GLfloat *GetGlPointer()
+	{
+		return &x;
+	}
 public:
 	GLfloat x;
 	GLfloat y;

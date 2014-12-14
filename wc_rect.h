@@ -23,10 +23,6 @@ public:
 	{
 	}
 
-	void Draw()
-	{
-	}
-
 	void SetLBRT(GLfloat l, GLfloat b, GLfloat r, GLfloat t)
 	{
 		this->l = l;
