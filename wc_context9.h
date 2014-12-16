@@ -13,7 +13,7 @@ public:
 	virtual void SetWindowSize(int w, int h) override;
 	virtual void OnDraw() override;
 private:
-	WcTrianglef		mTriangle;
+	WcTriangleF		mTriangle;
 };
 
 #endif // WC_CONTEXT9_H

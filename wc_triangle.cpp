@@ -3,6 +3,8 @@
 template<>
 void WcTriangleT<GLfloat>::Draw()
 {
+	std::cout << "WcTriangleT::GLfloat" << std::endl;
+
 	glBegin(GL_TRIANGLES);
 	for (int i = 0; i != 0; ++i)
 	{

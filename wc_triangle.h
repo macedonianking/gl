@@ -63,7 +63,7 @@ void WcTriangleT<Tp>::Draw()
 {
 }
 
-typedef WcTriangleT<GLfloat>	WcTrianglef;
-typedef WcTriangleT<GLdouble>	WcTriangled;
+typedef WcTriangleT<GLfloat>	WcTriangleF;
+typedef WcTriangleT<GLdouble>	WcTriangleD;
 
 #endif // WC_TRIANGLE_H

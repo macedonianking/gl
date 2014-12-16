@@ -170,7 +170,7 @@ public:
 	Tp	w;
 };
 
-typedef WcPoint4T<GLfloat>	WcPoint4f;
-typedef WcPoint4T<GLdouble>	WcPoint4d;
+typedef WcPoint4T<GLfloat>	WcPoint4F;
+typedef WcPoint4T<GLdouble>	WcPoint4D;
 
 #endif

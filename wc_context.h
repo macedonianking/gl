@@ -21,6 +21,7 @@ public:
 	}
 
 	virtual void SetWindowSize(GLsizei w, GLsizei h);
+	virtual void OnSetProjectionMatrix();
 	virtual void Draw();
 	virtual void OnDraw();
 

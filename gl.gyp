@@ -49,6 +49,8 @@
 				'wc_context9.h',
 				'wc_matrix.cpp',
 				'wc_matrix.h',
+				'wc_rect_impl.cpp',
+				'wc_rect_impl.h',
 			],
 			'libraries': [
 				'-lGL',
