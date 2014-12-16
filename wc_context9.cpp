@@ -20,15 +20,6 @@ void WcContext9::OnDraw()
 {
 	WcContext::OnDraw();
 
-	std::cout << "OnDraw" << std::endl;
-
 	glColor4f(1.0F, 0.0F, 0.0F, 1.0F);
-	glBegin(GL_LINES);
-	glVertex2f(0, 0);
-	glVertex2f(100, 100);
-	glEnd();
-
-	glBegin(GL_POINTS);
-	glVertex2f(0.0, 0.0);
-	glEnd();
+	mTriangle.Draw();
 }

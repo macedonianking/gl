@@ -3,6 +3,7 @@
 
 #include "base_config.h"
 #include "wc_color.h"
+#include "wc_line.h"
 
 class WcContext
 {
@@ -29,6 +30,13 @@ public:
 protected:
 	GLsizei		mWindowW;
 	GLsizei		mWindowH;
+
+	bool		mDrawHoriLine;
+	bool		mDrawVertLine;
+
+	wcColor		mCoordLineColor;
+	WcLineI		mHoriLine;
+	WcLineI		mVertLine;
 
 	wcColor		mBackgroundColor;
 };

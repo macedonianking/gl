@@ -1,48 +1,58 @@
-#ifndef WC_LINE_H
-#define WC_LINE_H
+#ifndef WC_LINE_IMPL_H
+#define WC_LINE_IMPL_H
 
 #include "wc_point.h"
 
-void wcDrawLine();
-
-class WcLine
+template<typename Tp>
+class WcLineT
 {
 public:
-	WcLine()
+	typedef WcPoint4T<Tp> Point;
+
+	WcLineT()
 	{
 	}
 
-	WcLine(const wcPt3f &fm, const wcPt3f &to)
-		: mPointFm(fm),
-		  mPointTo(to)
+	WcLineT(const Point &fm, const Point &to) : 
+		mFmPoint(fm),
+		mToPoint(to)
 	{
 	}
 
 	void Draw();
 
-	void SetFmPoint(const wcPt3f& pt)
+	void SetFmPoint(const Point& pt)
 	{
-		this->mPointFm = pt;
+		this->mFmPoint = pt;
 	}
 
-	void SetToPoint(const wcPt3f& pt)
+	void SetToPoint(const Point& pt)
 	{
-		this->mPointTo = pt;
+		this->mToPoint = pt;
 	}
 
-	const wcPt3f& GetFmPoint() const
+	const Point& GetFmPoint() const
 	{
-		return this->mPointFm;
+		return this->mFmPoint;
 	}
 
-	const wcPt3f& GetToPoint() const
+	const Point& GetToPoint() const
 	{
-		return this->mPointTo;
+		return this->mToPoint;
 	}
 
-private:
-	wcPt3f	mPointFm;
-	wcPt3f	mPointTo;
+public:
+	Point	mFmPoint;
+	Point	mToPoint;
 };
 
-#endif 
+template<typename Tp>
+void WcLineT<Tp>::Draw()
+{
+}
+
+typedef WcLineT<GLfloat>	WcLineF;
+typedef WcLineT<GLdouble>	WcLineD;
+typedef	WcLineT<GLint>		WcLineI;
+
+#endif // WC_LINE_IMPL_H

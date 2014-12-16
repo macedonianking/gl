@@ -1,100 +1,139 @@
-#ifndef GL_WC_RECT_H
-#define GL_WC_RECT_H
+#ifndef WC_RECT_IMPL_H
+#define WC_RECT_IMPL_H
+
+#include <iostream>
+#include <sstream>
 
 #include "wc_point.h"
 #include "base_config.h"
 
-class wcRectF
+
+template<typename Tp>
+class WcRectT
 {
 public:
-	wcRectF()
-		: l(0.0F), 
-		  b(0.0F),
-		  r(0.0F),
-		  t(0.0F)
+	WcRectT()
+		: left(0), 
+		  bottom(0),
+		  right(0),
+		  top(0)
 	{
 	}
 
-	wcRectF(GLfloat l, GLfloat b, GLfloat r, GLfloat t)
-		: l(l),
-		  b(b),
-		  r(r),
-		  t(t)
+	WcRectT(Tp lefteft, Tp bottomottom, Tp rightight, Tp topop)
+		: left(left),
+		  bottom(bottom),
+		  right(right),
+		  top(top)
 	{
 	}
 
-	void SetLBRT(GLfloat l, GLfloat b, GLfloat r, GLfloat t)
+	void SetLBRT(Tp left, Tp bottom, Tp right, Tp top)
 	{
-		this->l = l;
-		this->b = b;
-		this->r = r;
-		this->t = t;
+		this->left = left;
+		this->bottom = bottom;
+		this->right = right;
+		this->top = top;
 	}
 
-	void SetXYWH(GLfloat x, GLfloat y, GLfloat w, GLfloat h)
+	void SetXYWH(Tp x, Tp y, Tp w, Tp h)
 	{
-		this->l = x;
-		this->b = y;
-		this->r = this->l + w;
-		this->t = this->b + h;
+		this->left = x;
+		this->bottom = y;
+		this->right = this->left + w;
+		this->top = this->bottom + h;
 	}
 
-	wcRectF &AdjustX()
+	WcRectT &AdjustX()
 	{
-		if (this->r < this->l)
+		if (this->right < this->left)
 		{
-			GLfloat v = this->r;
-			this->r = this->l;
-			this->l = v;
+			Tp v = this->right;
+			this->right = this->left;
+			this->left = v;
 		}
 		return *this;
 	}
 
-	wcRectF &AdjustY()
+	WcRectT &AdjustY()
 	{
-		if (this->t < this->b)
+		if (this->top < this->bottom)
 		{
-			GLfloat v = this->t;
-			this->t = this->b;
-			this->b = v;
+			Tp v = this->top;
+			this->top = this->bottom;
+			this->bottom = v;
 		}
 		return *this;
 	}
 
-	wcRectF &Adjust()
+	WcRectT &Adjust()
 	{
 		return this->AdjustX().AdjustY();
 	}
 
-	GLfloat Width() const
+	Tp Width() const
 	{
-		return r - l;
+		return right - left;
 	}
 
-	GLfloat Height() const
+	Tp Height() const
 	{
-		return t - b;
+		return this->top - this->bottom;
 	}
 
-	GLfloat GetCenterX() const
+	Tp GetCenterX() const
 	{
-		return (l + r) / 2.0F;
+		return (this->left + this->right) / 2;
 	}
 
-	GLfloat GetCenterY() const
+	Tp GetCenterY() const
 	{
-		return (b + t) / 2.0F;
+		return (this->top + this->bottom) / 2;
 	}
 
+	std::string ToString() const;
 	void Draw(GLenum mode);
 
-	static wcRectF FromXYWH(GLfloat x, GLfloat y, GLfloat w, GLfloat h);
-	static wcRectF FromLBRT(GLfloat l, GLfloat b, GLfloat r, GLfloat t);
+	static WcRectT FromXYWH(Tp x, Tp y, Tp w, Tp h);
+	static WcRectT FromLBRT(Tp left, Tp bottom, Tp right, Tp top);
 public:
-	GLfloat	l;
-	GLfloat b;	
-	GLfloat	r;
-	GLfloat	t;
+	Tp	left;
+	Tp	bottom;	
+	Tp	right;
+	Tp	top;
 };
 
-#endif
+template<typename Tp>
+void WcRectT<Tp>::Draw(GLenum mode)
+{
+}
+
+template<typename Tp>
+std::string WcRectT<Tp>::ToString() const
+{
+	std::stringstream out;
+	
+	out << "WcRect["
+		<< left << ","
+		<< bottom << ","
+		<< right << ","
+		<< top << "]";
+	return out.str();
+}
+
+template<typename Tp>
+WcRectT<Tp> WcRectT<Tp>::FromXYWH(Tp x, Tp y, Tp w, Tp h)
+{
+	return WcRectT(x, y, x + w, y + h);
+}
+
+template<typename Tp>
+WcRectT<Tp> WcRectT<Tp>::FromLBRT(Tp left, Tp bottom, Tp right, Tp top)
+{
+	return WcRectT(left, bottom, right, top);
+}
+
+typedef WcRectT<GLint>		WcRectI;	
+typedef WcRectT<GLfloat>	WcRectF;
+typedef WcRectT<GLdouble>	WcRectD;
+#endif // WC_RECT_IMPL_H

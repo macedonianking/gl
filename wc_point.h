@@ -173,4 +173,22 @@ public:
 typedef WcPoint4T<GLfloat>	WcPoint4F;
 typedef WcPoint4T<GLdouble>	WcPoint4D;
 
+template<typename Tp, typename Point = WcPoint4T<Tp>>
+Point make_point(Tp x, Tp y)
+{
+	return Point(x, y);
+}
+
+template<typename Tp, typename Point = WcPoint4T<Tp>>
+Point make_point(Tp x, Tp y, Tp z)
+{
+	return Point(x, y, z);
+}
+
+template<typename Tp, typename Point = WcPoint4T<Tp>>
+Point make_point(Tp x, Tp y, Tp z, Tp w)
+{
+	return Point(x, y, z, w);
+}
+
 #endif

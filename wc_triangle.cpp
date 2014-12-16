@@ -3,10 +3,8 @@
 template<>
 void WcTriangleT<GLfloat>::Draw()
 {
-	std::cout << "WcTriangleT::GLfloat" << std::endl;
-
 	glBegin(GL_TRIANGLES);
-	for (int i = 0; i != 0; ++i)
+	for (int i = 0; i != 3; ++i)
 	{
 		glVertex4fv(mBuffer[i].GetGlPointer());
 	}
@@ -17,7 +15,7 @@ template<>
 void WcTriangleT<GLdouble>::Draw()
 {
 	glBegin(GL_TRIANGLES);
-	for (int i = 0; i != 0; ++i)
+	for (int i = 0; i != 3; ++i)
 	{
 		glVertex4dv(mBuffer[i].GetGlPointer());
 	}
