@@ -4,6 +4,7 @@
 #include "wc_point.h"
 
 #include <string>
+#include <sstream>
 
 class wcMatrix3f
 {
@@ -89,43 +90,155 @@ private:
 };
 
 template<typename Tp>
+class WcMatrix4T;
+
+template<typename Tp>
+class GlMatrixT;
+
+template<typename Tp>
+class GlMatrixT
+{
+public:
+	GlMatrixT()
+	{
+	}
+
+	operator Tp*()
+	{
+		return &mMat[0][0];
+	}
+
+	operator const Tp*() const
+	{
+		return &mMat[0][0];
+	}
+
+	friend class WcMatrix4T<Tp>;
+private:
+	Tp		mMat[4][4];
+};
+
+template<typename Tp>
 class WcMatrix4T
 {
 public:
 	WcMatrix4T();
 	WcMatrix4T(const Tp* mat);
 
-	class GlMatrix
-	{
-	public:
-		operator Tp*()
-		{
-			return &mMat[0][0];
-		}
-
-		operator const Tp*() const
-		{
-			return &mMat[0][0];
-		}
-	private:
-		GlMatrix(const WcMatrix4T &mat);
-	private:
-		Tp mMat[4][4];
-	};
-
 	void SetIdentity();
 	void SetTranslate(Tp tx, Tp ty, Tp tz);
 
-	std::string ToString() const;
+	WcMatrix4T GetTranspose() const;
+	const GlMatrixT<Tp> GetGlMatrix() const;
 
-	friend class GlMatrix;
+	const Tp* GetGlPointer() const {
+		return &mMat[0][0];
+	}
+
+	Tp *GetGlPointer() {
+		return &mMat[0][0];
+	}
+
+	std::string ToString() const;
+private:
+	void GetTranspose(Tp mat[][4]) const;
+
 private:
 	Tp	mMat[4][4];
 };
 
-typedef WcMatrix4T<GLfloat>		WcMatrix4f;
-typedef WcMatrix4T<GLdouble>	WcMatrix4d;
+template<typename Tp>
+WcMatrix4T<Tp>::WcMatrix4T()
+{
+	SetIdentity();
+}
 
+template<typename Tp>
+WcMatrix4T<Tp>::WcMatrix4T(const Tp *mat)
+{
+	memcpy(&mMat[0][0], mat, sizeof(Tp) * 16);
+}
+
+template<typename Tp>
+void WcMatrix4T<Tp>::SetIdentity()
+{
+	for (int r = 0; r != 4; ++r)
+	{
+		for (int c = 0; c != 4; ++c)
+		{
+			if (r != c)
+			{
+				mMat[r][c] = (Tp)0.0;
+			}
+			else
+			{
+				mMat[r][c] = (Tp)1.0;
+			}
+		}
+	}
+}
+
+template<typename Tp>
+const GlMatrixT<Tp> WcMatrix4T<Tp>::GetGlMatrix() const
+{
+	GlMatrixT<Tp> glMatrix;
+	GetTranspose(glMatrix.mMat);
+	return glMatrix;
+}
+
+template<typename Tp>
+void WcMatrix4T<Tp>::SetTranslate(Tp tx, Tp ty, Tp tz)
+{
+	SetIdentity();
+	mMat[0][3] = tx;
+	mMat[1][3] = ty;
+	mMat[2][3] = tz;
+}
+
+template<typename Tp>
+std::string WcMatrix4T<Tp>::ToString() const
+{
+	std::stringstream out;
+
+	out << "[";
+	for (int r = 0; r != 4; ++r)
+	{
+		for (int c = 0; c != 4; ++c)
+		{
+			if (r != 0 || c != 0)
+			{
+				out << ", ";
+			}
+			out << mMat[r][c];
+		}
+	}
+	out << "]";
+
+	return out.str();
+}
+
+template<typename Tp>
+void  WcMatrix4T<Tp>::GetTranspose(Tp mat[][4]) const
+{
+	for (int r = 0; r != 4; ++r)
+	{
+		for (int c = 0; c != 4; ++c)
+		{
+			mat[r][c] = this->mMat[c][r];
+		}
+	}
+}
+
+template<typename Tp>
+WcMatrix4T<Tp> WcMatrix4T<Tp>::GetTranspose() const
+{
+	WcMatrix4T<Tp> mat;
+	GetTranspose(mat.mMat);
+	return mat;
+}
+
+typedef WcMatrix4T<GLfloat>		WcMatrix4F;
+typedef WcMatrix4T<GLdouble>	WcMatrix4D;
 
 void SetMatrix3fIdentity(struct wcMatrix3f *ptr);
 void SetMatrix3fTranslate(struct wcMatrix3f *ptr, GLfloat tx, GLfloat ty);
