@@ -3,6 +3,8 @@
 #include "wc_context9.h"
 #include "wc_rect.h"
 
+static WcContext	*gContext;
+
 WcContext::WcContext() :
 	mWindowW(500),
 	mWindowH(500),
@@ -28,15 +30,18 @@ void WcContext::SetWindowSize(GLsizei w, GLsizei h)
 void WcContext::OnSetProjectionMatrix()
 {
 	WcRectT<int> rect;
+	int zNear, zFar;
 
 	rect.left = -mWindowW / 2;
 	rect.bottom = -mWindowH / 2;
 	rect.right = rect.left + mWindowW;
 	rect.top = rect.bottom + mWindowH;
+	zNear = rect.left;
+	zFar = rect.right;
 
 	glMatrixMode(GL_PROJECTION);
 	glLoadIdentity();
-	gluOrtho2D(rect.left, rect.right, rect.bottom, rect.top);
+	glOrtho(rect.left, rect.right, rect.bottom, rect.top, zNear, zFar);
 
 	mHoriLine.SetFmPoint(make_point(rect.left, rect.GetCenterY()));
 	mHoriLine.SetToPoint(make_point(rect.right, rect.GetCenterY()));
@@ -74,7 +79,12 @@ void WcContext::OnDraw()
 }
 
 // static
-WcContext *WcContext::NewWcContext()
+WcContext *WcContext::GetCurrentContext()
 {
-	return new WcContext9();
+	if (!gContext)
+	{
+		gContext = new WcContext9();
+	}
+	return gContext;
 }
+

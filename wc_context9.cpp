@@ -26,8 +26,9 @@ void WcContext9::OnDraw()
 	glColor4f(1.0F, 0.0F, 0.0F, 1.0F);
 	glPushMatrix();
 	glLoadIdentity();
-	matrix.SetTranslate(100.0F, 0.0F, 0.0F);
+
 	glLoadMatrixf(matrix.GetGlMatrix());
 	mTriangle.Draw();
+
 	glPopMatrix();
 }

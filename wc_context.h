@@ -5,6 +5,10 @@
 #include "wc_color.h"
 #include "wc_line.h"
 
+#define CONTEXT_FPS_DEFAULT	60
+
+#define TIMER_ID_UI		1000
+
 class WcContext
 {
 public:
@@ -23,14 +27,17 @@ public:
 
 	virtual void SetWindowSize(GLsizei w, GLsizei h);
 	virtual void OnSetProjectionMatrix();
+
 	virtual void Draw();
 	virtual void OnDraw();
 
-	static WcContext *NewWcContext();
+	static WcContext *GetCurrentContext();
 protected:
 	GLsizei		mWindowW;
 	GLsizei		mWindowH;
+	int			mFPS;
 
+	bool		mTimerRunning;
 	bool		mDrawHoriLine;
 	bool		mDrawVertLine;
 

@@ -2,92 +2,14 @@
 #define WC_MATRIX_H
 
 #include "wc_point.h"
+#include "wc_math.h"
 
 #include <string>
 #include <sstream>
 
-class wcMatrix3f
-{
-public:
-	wcMatrix3f();
-	wcMatrix3f(const GLfloat *ptr);
-
-	void SetTranslate(GLfloat tx, GLfloat ty);
-	void SetScale(GLfloat sx, GLfloat sy);
-	void SetScale(GLfloat px, GLfloat py, GLfloat sx, GLfloat sy);
-	void SetRotate(GLfloat angle);
-	void SetRotate(GLfloat angle, GLfloat px, GLfloat py);
-
-	wcMatrix3f	Transpose() const;
-	void		SetIdentity();
-	std::string ToString() const;
-
-	void PrevMultiply(const wcMatrix3f &rhs);
-
-	GLfloat		mat[3][3];
-};
-
-class wcMatrix4f
-{
-public:
-	wcMatrix4f();
-	wcMatrix4f(const GLfloat *ptr);
-	wcMatrix4f(const wcMatrix3f& mat3);
-
-
-	wcMatrix4f	Transpose() const;
-	void		SetIdentity();
-	std::string ToString() const;
-
-	GLfloat		mat[4][4];
-};
-
-extern struct wcMatrix3f WC_MATRIX3F_IDENTITY;
-
-class GlMatrix4f
-{
-public:
-	GlMatrix4f();
-	GlMatrix4f(const wcMatrix3f *mat);
-	GlMatrix4f(const wcMatrix4f *mat);
-
-	operator GLfloat*();
-	operator const GLfloat*() const;
-
-private:
-	wcMatrix4f	mMat;
-};
-
-class Matrix3f
-{
-public:
-	Matrix3f();
-	Matrix3f(const struct wcMatrix3f *mat);
-
-	void SetMatrix(const wcMatrix3f *mat);
-
-	void PrevMultiply(const wcMatrix3f *mat);
-	void PrevTranslate(GLfloat tx, GLfloat ty);
-	void PrevScale(GLfloat sx, GLfloat sy);
-	void PrevScale(GLfloat px, GLfloat py, GLfloat sx, GLfloat sy);
-	void PrevRotate(GLfloat angle);
-	void PrevRotate(GLfloat angle, GLfloat px, GLfloat py);
-	
-	const GlMatrix4f GetGlMatrix() const;
-
-	operator const struct wcMatrix3f*() const
-	{
-		return &mMat;
-	}
-
-	operator struct wcMatrix3f*() 
-	{
-		return &mMat;
-	}
-
-private:
-	struct wcMatrix3f mMat;
-};
+#define kMatrixIndexX	0
+#define kMatrixIndexY	1
+#define kMatrixIndexZ	2
 
 template<typename Tp>
 class WcMatrix4T;
@@ -125,8 +47,12 @@ public:
 	WcMatrix4T();
 	WcMatrix4T(const Tp* mat);
 
-	void SetIdentity();
-	void SetTranslate(Tp tx, Tp ty, Tp tz);
+	WcMatrix4T& Transpose();
+	WcMatrix4T&	SetIdentity();
+	WcMatrix4T&	SetTranslate(Tp tx, Tp ty, Tp tz);
+	WcMatrix4T&	SetRotateX(Tp angle);
+	WcMatrix4T&	SetRotateY(Tp angle);
+	WcMatrix4T& SetRotateZ(Tp angle);
 
 	WcMatrix4T GetTranspose() const;
 	const GlMatrixT<Tp> GetGlMatrix() const;
@@ -160,7 +86,7 @@ WcMatrix4T<Tp>::WcMatrix4T(const Tp *mat)
 }
 
 template<typename Tp>
-void WcMatrix4T<Tp>::SetIdentity()
+WcMatrix4T<Tp>&	WcMatrix4T<Tp>::SetIdentity()
 {
 	for (int r = 0; r != 4; ++r)
 	{
@@ -168,14 +94,15 @@ void WcMatrix4T<Tp>::SetIdentity()
 		{
 			if (r != c)
 			{
-				mMat[r][c] = (Tp)0.0;
+				mMat[r][c] = (Tp)0;
 			}
 			else
 			{
-				mMat[r][c] = (Tp)1.0;
+				mMat[r][c] = (Tp)1;
 			}
 		}
 	}
+	return *this;
 }
 
 template<typename Tp>
@@ -187,12 +114,14 @@ const GlMatrixT<Tp> WcMatrix4T<Tp>::GetGlMatrix() const
 }
 
 template<typename Tp>
-void WcMatrix4T<Tp>::SetTranslate(Tp tx, Tp ty, Tp tz)
+WcMatrix4T<Tp>&	WcMatrix4T<Tp>::SetTranslate(Tp tx, Tp ty, Tp tz)
 {
 	SetIdentity();
 	mMat[0][3] = tx;
 	mMat[1][3] = ty;
 	mMat[2][3] = tz;
+	
+	return *this;
 }
 
 template<typename Tp>
@@ -218,7 +147,20 @@ std::string WcMatrix4T<Tp>::ToString() const
 }
 
 template<typename Tp>
-void  WcMatrix4T<Tp>::GetTranspose(Tp mat[][4]) const
+WcMatrix4T<Tp>& WcMatrix4T<Tp>::Transpose()
+{
+	for (int r = 0; r != 4; ++r)
+	{
+		for (int c = r + 1; c != 4; ++c)
+		{
+			mMat[r][c] = mMat[c][r];
+		}
+	}
+	return *this;
+}
+
+template<typename Tp>
+void WcMatrix4T<Tp>::GetTranspose(Tp mat[][4]) const
 {
 	for (int r = 0; r != 4; ++r)
 	{
@@ -237,18 +179,64 @@ WcMatrix4T<Tp> WcMatrix4T<Tp>::GetTranspose() const
 	return mat;
 }
 
+template<typename Tp>
+WcMatrix4T<Tp>& WcMatrix4T<Tp>::SetRotateX(Tp angle)
+{
+	double theta;
+	Tp cosTheta, sinTheta;
+
+	theta = ToRadian(angle);
+	cosTheta = (Tp)cos(theta);
+	sinTheta = (Tp)sin(theta);
+
+	SetIdentity();
+	mMat[kMatrixIndexY][kMatrixIndexY] = cosTheta;
+	mMat[kMatrixIndexY][kMatrixIndexZ] = -sinTheta;
+	mMat[kMatrixIndexZ][kMatrixIndexY] = sinTheta;
+	mMat[kMatrixIndexZ][kMatrixIndexZ] = cosTheta;
+
+	return *this;
+}
+
+template<typename Tp>
+WcMatrix4T<Tp>& WcMatrix4T<Tp>::SetRotateY(Tp angle)
+{
+	double theta;
+	Tp cosTheta, sinTheta;
+
+	theta = ToRadian(angle);
+	cosTheta = (Tp)cos(theta);
+	sinTheta = (Tp)sin(theta);
+
+	SetIdentity();
+	mMat[kMatrixIndexZ][kMatrixIndexZ] = cosTheta;
+	mMat[kMatrixIndexZ][kMatrixIndexX] = -sinTheta;
+	mMat[kMatrixIndexX][kMatrixIndexZ] = sinTheta;
+	mMat[kMatrixIndexX][kMatrixIndexX] = cosTheta;
+	
+	return *this;
+}
+
+template<typename Tp>
+WcMatrix4T<Tp>& WcMatrix4T<Tp>::SetRotateZ(Tp angle)
+{
+	double theta;
+	Tp cosTheta, sinTheta;
+
+	theta = ToRadian(angle);
+	cosTheta = (Tp)cos(theta);
+	sinTheta = (Tp)sin(theta);
+
+	SetIdentity();
+	mMat[kMatrixIndexX][kMatrixIndexX] = cosTheta;
+	mMat[kMatrixIndexX][kMatrixIndexY] = -sinTheta;
+	mMat[kMatrixIndexY][kMatrixIndexX] = sinTheta;
+	mMat[kMatrixIndexY][kMatrixIndexY] = cosTheta;
+	
+	return *this;
+}
+
 typedef WcMatrix4T<GLfloat>		WcMatrix4F;
 typedef WcMatrix4T<GLdouble>	WcMatrix4D;
-
-void SetMatrix3fIdentity(struct wcMatrix3f *ptr);
-void SetMatrix3fTranslate(struct wcMatrix3f *ptr, GLfloat tx, GLfloat ty);
-void SetMatrix3fScale(struct wcMatrix3f *ptr, GLfloat sx, GLfloat sy);
-void SetMatrix3fScale(struct wcMatrix3f *ptr, GLfloat px, GLfloat py,
-					  GLfloat sx, GLfloat sy);
-void SetMatrix3fRotate(struct wcMatrix3f *ptr, GLfloat angle);
-void SetMatrix3fRotate(struct wcMatrix3f *ptr, GLfloat angle, 
-					   GLfloat px, GLfloat py);
-struct wcMatrix3f wcMatrix3fMulitply(struct wcMatrix3f *prev,
-									 struct wcMatrix3f *next);
 
 #endif

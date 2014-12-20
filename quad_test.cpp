@@ -35,7 +35,7 @@ void QuadTestInitialize()
 	struct main_entry_t *ptr;
 	if(gContext == NULL)
 	{
-		gContext = WcContext::NewWcContext();
+		gContext = WcContext::GetCurrentContext();
 	}
 
 	ptr = &gMainEntry;
@@ -59,7 +59,7 @@ void main_initial_func()
 {
 	if (gContext == NULL)
 	{
-		gContext = WcContext::NewWcContext();
+		gContext = WcContext::GetCurrentContext();
 	}
 }
 
