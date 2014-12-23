@@ -1,37 +1,41 @@
 #ifndef WC_COLOR_H
 #define WC_COLOR_H
 
-#define WC_COLOR_WHITE	wcColor(1.0F, 1.0F, 1.0F, 1.0F)
-#define WC_COLOR_RED	wcColor(1.0F, 0.0F, 0.0F, 1.0F)
-#define WC_COLOR_GREEN	wcColor(0.0F, 1.0F, 0.0F, 1.0F)
-#define WC_COLOR_BLUE	wcColor(0.0F, 0.0F, 1.0F, 1.0F)
-#define WC_COLOR_BLACK	wcColor(0.0F, 0.0F, 0.0F, 1.0F)
+#include "base_config.h"
 
-class wcColor
+#define WC_COLOR_WHITE	WcColorT<GLfloat>(1, 1, 1, 1)
+#define WC_COLOR_RED	WcColorT<GLfloat>(1, 0, 0, 1)
+#define WC_COLOR_GREEN	WcColorT<GLfloat>(0, 1, 0, 1)
+#define WC_COLOR_BLUE	WcColorT<GLfloat>(0, 0, 1, 1)
+#define WC_COLOR_BLACK	WcColorT<GLfloat>(0, 0, 0, 1)
+#define WC_COLOR_YELLOW	WcColorT<GLfloat>(1, 1, 0, 1)
+
+template<typename Tp>
+class WcColorT
 {
 public:
-	GLfloat	r;
-	GLfloat g;
-	GLfloat b;
-	GLfloat a;
+	Tp	r;
+	Tp	g;
+	Tp	b;
+	Tp	a;
 
-	wcColor()
-		: r(1.0F),
-		  g(1.0F),
-		  b(1.0F),
-		  a(1.0F)
+	WcColorT()
+		: r(1),
+		  g(1),
+		  b(1),
+		  a(1)
 	{
 	}
 
-	wcColor(GLfloat r, GLfloat g, GLfloat b)
+	WcColorT(Tp r, Tp g, Tp b)
 		: r(r),
 	      g(g),
 		  b(b),
-		  a(1.0F)	  
+		  a(1)	  
 	{
 	}
 
-	wcColor(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
+	WcColorT(Tp r, Tp g, Tp b, Tp a)
 		: r(r),
 	      g(g),
 		  b(b),
@@ -39,15 +43,15 @@ public:
 	{
 	}
 
-	void Set(GLfloat r, GLfloat g, GLfloat b)
+	void Set(Tp r, Tp g, Tp b)
 	{
 		this->r = r;
 		this->g = g;
 		this->b = b;
-		this->a = 1.0F;
+		this->a = 1;
 	}
 
-	void Set(GLfloat r, GLfloat g, GLfloat b, GLfloat a)
+	void Set(Tp r, Tp g, Tp b, Tp a)
 	{
 		this->r = r;
 		this->g = g;
@@ -55,15 +59,24 @@ public:
 		this->a = a;
 	}
 
-	const GLfloat *GetGlPointer() const
+	const Tp *GetGlPointer() const
 	{
 		return &r;	
 	}
 
-	GLfloat *GetGlPointer()
+	Tp *GetGlPointer()
 	{
 		return &r;
 	}
 };
+
+typedef WcColorT<GLdouble>	WcColorD;
+typedef WcColorT<GLfloat>	WcColorF;
+
+template<typename Tp>
+void WcSetColor(const WcColorT<Tp> &color)
+{
+	std::cout << "WcSetColor default implementation" << std::endl;
+}
 
 #endif

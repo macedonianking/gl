@@ -9,11 +9,13 @@
 
 #include "main_application.h"
 #include "quad_test.h"
+#include "wc_looper.h"
 
 int main(int argc, char **argv)
 {
 	struct main_entry_t *ptr;
-
+	
+	WcLooper::InitMainLooper();
 	QuadTestInitialize();
 	ptr = GetMainEntry();
 	glutInit(&argc, argv);
@@ -28,6 +30,7 @@ int main(int argc, char **argv)
 
 	glutMainLoop();
 	ptr->mDestroyFunc();
+	WcLooper::DeleteMainLooper();
 	
 	return 0;
 }

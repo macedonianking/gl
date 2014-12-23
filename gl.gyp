@@ -39,6 +39,8 @@
 				'wc_list.cpp',
 				'wc_fill.cpp',
 				'wc_fill.h',
+				'wc_color.h',
+				'wc_color.cpp',
 				'wc_context.cpp',
 				'wc_context.h',
 				'wc_context9.cpp',
@@ -59,6 +61,7 @@
 				'wc_handler.h',
 				'wc_looper.cpp',
 				'wc_loper.h',
+				'wc_unique_ptr.h',
 			],
 			'libraries': [
 				'-lGL',

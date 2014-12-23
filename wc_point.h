@@ -154,6 +154,13 @@ public:
 	{
 	}
 
+	void Offset(Tp offsetX, Tp offsetY, Tp offsetZ)
+	{
+		x += offsetX;
+		y += offsetY;
+		z += offsetZ;
+	}
+
 	Tp *GetGlPointer()
 	{
 		return &x;

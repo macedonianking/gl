@@ -8,24 +8,23 @@
 
 #include "wc_time.h"
 
+class WcHandler;
+
 struct WcMessage
 {
 public:
+	WcMessage()
+		: WcMessage(0)
+	{
+	}
+
 	WcMessage(int w) :
-		what(w),
-		arg0(0),
-		arg1(0),
-		data(NULL),
-		time(kTimeMillisNull)
+		WcMessage(w, 0, 0)	
 	{
 	}
 
 	WcMessage(int w, int arg0, int arg1) :
-		what(w),
-		arg0(arg0),
-		arg1(arg1),
-		data(NULL),
-		time(kTimeMillisNull)
+		WcMessage(w, arg0, arg1, NULL)	
 	{
 	}
 
@@ -34,7 +33,8 @@ public:
 		arg0(arg0),
 		arg1(arg1),
 		data(data),
-		time(kTimeMillisNull)
+		time(kTimeMillisNull),
+		handler(NULL)
 	{
 	}
 
@@ -45,6 +45,7 @@ public:
 	int			arg1;
 	void		*data;
 	millis_t	time;
+	WcHandler	*handler;
 };
 
 #endif

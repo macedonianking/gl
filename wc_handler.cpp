@@ -3,15 +3,15 @@
 #include "wc_looper.h"
 #include "wc_message_queue.h"
 
-WcHandler::WcHandler(WcLooper *looper)
+WcHandler::WcHandler(WcLooper *looper) :
+	mQueue(looper->mQueue)
 {
 }
 
 WcHandler::~WcHandler()
 {
-	if (mQueue != NULL)
-	{
-		delete mQueue;
+	if (mQueue != NULL) {
+		mQueue->DoDeleteMessageForHandler(this);
 		mQueue = NULL;
 	}
 }

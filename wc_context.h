@@ -41,11 +41,11 @@ protected:
 	bool		mDrawHoriLine;
 	bool		mDrawVertLine;
 
-	wcColor		mCoordLineColor;
+	WcColorF	mCoordLineColor;
 	WcLineI		mHoriLine;
 	WcLineI		mVertLine;
 
-	wcColor		mBackgroundColor;
+	WcColorF	mBackgroundColor;
 };
 
 #endif // WC_CONTEXT_H

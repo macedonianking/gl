@@ -16,31 +16,28 @@ private:
 	typedef MessageQueue::const_iterator	const_iterator;
 
 	WcLooper		*mLooper;
-	WcHandler		*mHandler;
 
 	MessageQueue	mNQueue;
 	MessageQueue	mDQueue;
 
 public:
-	WcMessageQueue(WcLooper *looper, WcHandler *handler);
+	WcMessageQueue(WcLooper *looper);
 	virtual ~WcMessageQueue();
 
-	void HandleMessages();
-	void AddMessage(const WcMessage& msg);
-	void Clear();
+	void		AddMessage(const WcMessage& msg);
+	void		DelMessage(int what);
+	void		Clear();
+	bool		Next(WcMessage *msg);
+	bool		NextTime(millis_t *dstMillis) const;
 
 	friend class WcLooper;
+	friend class WcHandler;
 private:
-	void ResetLooper()
-	{
-		this->mLooper = NULL;
-	}
-
-	void HandleNMessages();
-	void HandleDMessages();
+	bool DoDeleteMessage(MessageQueue &queue, int what);
+	void DoDeleteMessageForHandler(WcHandler *handler);
+	bool DoDeleteMessageForHandler(MessageQueue &queue, WcHandler *handler);
 	void DoClearMessageQueue(MessageQueue &queue);
 	void NotifyQueueChanged();
-
 };
 
 #endif // WC_MESSAGE_QUEUE_H
