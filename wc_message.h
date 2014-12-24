@@ -33,7 +33,7 @@ public:
 		arg0(arg0),
 		arg1(arg1),
 		data(data),
-		time(kTimeMillisNull),
+		time(WcTime::kTimeMillisNull),
 		handler(NULL)
 	{
 	}

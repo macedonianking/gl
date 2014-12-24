@@ -101,4 +101,9 @@ void WcLooper::DeleteMainLooper()
 	sMainLooper = NULL;
 }
 
+WcLooper *WcLooper::MainLooper()
+{
+	return sMainLooper;
+}
+
 WcLooper *WcLooper::sMainLooper = NULL;

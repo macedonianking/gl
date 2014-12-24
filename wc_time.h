@@ -13,10 +13,10 @@ typedef uint64_t		umillis_t;
 #define WC_TIME_NANOS_PER_MILLIS	1000000
 #define WC_TIME_NANOS_PER_SECOND	1000000000
 
-extern const millis_t kTimeMillisNull;
-
 class WcTime
 {
+public:
+	static const millis_t kTimeMillisNull;
 public:
 	enum TimeValueSepc
 	{

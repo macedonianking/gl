@@ -7,8 +7,6 @@
 
 #define WC_TIME_START_YEAR
 
-extern const millis_t kTimeMillisNull = -1;
-
 WcTime::WcTime()
 	: mMillis(WcTime::CurrentTimeMillis())
 {
@@ -76,3 +74,5 @@ millis_t WcTime::CurrentTimeMillis()
 	millis += static_cast<millis_t>(value.tv_nsec / WC_TIME_NANOS_PER_MILLIS);
 	return millis;
 }
+
+const millis_t WcTime::kTimeMillisNull = -1;

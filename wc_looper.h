@@ -15,8 +15,9 @@ extern void WcLooperTimerFunc(int id);
 class WcLooper
 {
 public:
-	static void InitMainLooper();
-	static void DeleteMainLooper(); 
+	static void		InitMainLooper();
+	static void		DeleteMainLooper(); 
+	static WcLooper *MainLooper();
 private:
 	static WcLooper *sMainLooper;
 public:

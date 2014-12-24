@@ -18,7 +18,7 @@ void WcMessageQueue::AddMessage(const WcMessage &msg)
 {
 	MessageQueue *ptr = &this->mNQueue;
 
-	if (msg.time == kTimeMillisNull)
+	if (msg.time == WcTime::kTimeMillisNull)
 	{
 		ptr->push_back(msg);
 		NotifyQueueChanged();
