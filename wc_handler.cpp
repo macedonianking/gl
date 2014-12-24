@@ -83,8 +83,12 @@ bool WcHandler::PostMessageDelayed(const WcMessage &msg, millis_t delay)
 
 void WcHandler::HandleMessage(WcMessage &msg)
 {
+	if (mTarget != NULL)
+		mTarget->HandleMessage(msg);
 }
 
 void WcHandler::HandleClearMessage(WcMessage &msg)
 {
+	if (mTarget != NULL)
+		mTarget->HandleClearMessage(msg);
 }

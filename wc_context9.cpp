@@ -2,6 +2,10 @@
 
 #include "wc_matrix.h"
 
+#include <iostream>
+
+#define MSG_HELLO_WORLD	0x0001
+
 WcContext9::WcContext9()
 {
 	mTriangle.SetPoints(WcPoint4F(-50.0, -25.0), 
@@ -17,6 +21,7 @@ WcContext9::~WcContext9()
 void WcContext9::SetWindowSize(int w, int h)
 {
 	WcContext::SetWindowSize(w, h);
+	mHandler->PostMessage(MSG_HELLO_WORLD);
 }
 
 void WcContext9::OnDraw()
@@ -38,6 +43,32 @@ void WcContext9::OnDraw()
 	glTranslatef(-cp.x, -cp.y, -cp.z);
 	mTriangle.Draw();
 	glPopMatrix();
+}
 
+void WcContext9::HandleMessage(WcMessage &msg)
+{
+	switch(msg.what)
+	{
+		case MSG_HELLO_WORLD:
+			{
+				std::cout << "MSG_HELLO_WORLD" << std::endl;
+				break;
+			}
+		default:
+			{
+				WcContext::HandleMessage(msg);
+				break;
+			}
+	}
+}
 
+void WcContext9::HandleClearMessage(WcMessage &msg)
+{
+	switch(msg.what)
+	{
+		default: 
+			{
+				WcContext9::HandleClearMessage(msg);
+			}
+	}
 }

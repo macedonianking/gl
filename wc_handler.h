@@ -6,6 +6,26 @@
 class WcMessageQueue;
 class WcLooper;
 
+class WcHandlerTarget
+{
+public:
+	WcHandlerTarget()
+	{
+	}
+
+	virtual ~WcHandlerTarget()
+	{
+	}
+
+	virtual void HandleMessage(WcMessage &msg)
+	{
+	}
+
+	virtual void HandleClearMessage(WcMessage &msg)
+	{
+	}
+};
+
 class WcHandler
 {
 public:
@@ -13,6 +33,11 @@ public:
 	WcHandler(WcLooper *looper);
 
 	virtual ~WcHandler();
+
+	void SetTarget(WcHandlerTarget *target)
+	{
+		this->mTarget = target;
+	}
 
 	bool PostMessage(int what);
 	bool PostMessage(int what, int arg0, int arg1);
@@ -31,6 +56,7 @@ public:
 	virtual void HandleClearMessage(WcMessage &msg);
 private:
 	WcMessageQueue		*mQueue;
+	WcHandlerTarget		*mTarget;
 };
 
 #endif // WC_HANDLER_H

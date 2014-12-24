@@ -13,10 +13,13 @@ WcContext::WcContext() :
 	mCoordLineColor(WC_COLOR_BLUE),
 	mBackgroundColor(WC_COLOR_WHITE)
 {
+	mHandler = new WcHandler();
+	mHandler->SetTarget(this);
 }
 
 WcContext::~WcContext()
 {
+	delete mHandler;
 }
 
 void WcContext::SetWindowSize(GLsizei w, GLsizei h)
@@ -76,6 +79,14 @@ void WcContext::OnDraw()
 			mVertLine.Draw();
 		}
 	}
+}
+
+void WcContext::HandleMessage(WcMessage &msg)
+{
+}
+
+void WcContext::HandleClearMessage(WcMessage &msg)
+{
 }
 
 // static

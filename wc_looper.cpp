@@ -4,6 +4,7 @@
 #include <algorithm>
 #include <vector>
 
+#include "wc_logging.h"
 #include "wc_message.h"
 #include "wc_message_queue.h"
 #include "wc_handler.h"
@@ -32,13 +33,8 @@ WcLooper::~WcLooper()
 
 void WcLooper::Update()
 {
-	if (mQueue == NULL)
-	{
-		return;
-	}
-
 	millis_t dstMillis;
-	if (!mQueue->NextTime(&dstMillis))
+	if (mQueue == NULL || !mQueue->NextTime(&dstMillis))
 	{
 		return;
 	}
@@ -47,23 +43,19 @@ void WcLooper::Update()
 	if (dstMillis < 0) 
 		dstMillis = 0;
 
-	glutTimerFunc((unsigned int)dstMillis, WcLooperTimerFunc, mId);
+	glutTimerFunc((unsigned int)dstMillis, &WcLooperTimerFunc, mId);
 }
 
 void WcLooper::OnTimerUpdate() 
 {
 	if (mQueue == NULL)
-	{
 		return;
-	}
 
 	WcMessage msg;
 	for (;;)
 	{
 		if (!mQueue->Next(&msg))
-		{
 			break;
-		}	
 
 		msg.handler->HandleMessage(msg);
 	}

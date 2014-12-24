@@ -4,7 +4,7 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 
-#include "logging.h"
+#include "wc_logging.h"
 
 #define VIEW_W	400	
 #define VIEW_H	200

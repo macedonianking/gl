@@ -1,5 +1,6 @@
 #include "wc_message_queue.h"
 
+#include "wc_looper.h"
 #include "wc_time.h"
 #include "wc_handler.h"
 #include "wc_looper.h"
@@ -167,7 +168,8 @@ bool WcMessageQueue::NextTime(millis_t *dstMillis) const
 	now = WcTime::CurrentTimeMillis();
 	if (!mNQueue.empty())
 	{
-		*dstMillis = now;
+		if (dstMillis != NULL) 
+			*dstMillis = now;
 		return true;
 	}
 
@@ -175,11 +177,13 @@ bool WcMessageQueue::NextTime(millis_t *dstMillis) const
 	{
 		if (TimeLessEqual(now, mDQueue.front().time))
 		{
-			*dstMillis = mDQueue.front().time;
+			if (dstMillis != NULL) 
+				*dstMillis = mDQueue.front().time;
 		}
 		else
 		{
-			*dstMillis = now;
+			if (dstMillis != NULL)
+				*dstMillis = now;
 		}
 		return true;
 	}

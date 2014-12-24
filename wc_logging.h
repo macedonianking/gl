@@ -2,6 +2,7 @@
 #define GL_LOGGING_H
 
 #include <assert.h>
+#include <iostream>
 
 #ifndef NDEBUG
 #define	DASSERT(cond)

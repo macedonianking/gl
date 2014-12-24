@@ -21,7 +21,7 @@
 			'sources': [
 				'main.cpp',
 				'basic_config.h',
-				'logging.h',
+				'wc_logging.h',
 				'main_application.cpp',
 				'main_application.h',
 				'quad_test.h',
