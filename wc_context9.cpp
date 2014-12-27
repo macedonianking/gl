@@ -51,7 +51,7 @@ void WcContext9::HandleMessage(WcMessage &msg)
 	{
 		case MSG_HELLO_WORLD:
 			{
-				std::cout << "MSG_HELLO_WORLD" << std::endl;
+				LOG(ERROR) << "MSG_HELLO_WORLD";
 				break;
 			}
 		default:

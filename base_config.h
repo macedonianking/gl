@@ -9,6 +9,8 @@
 #include <GL/glu.h>
 #include <GL/glut.h>
 
+#include "wc_logging.h"
+
 #ifndef CMATH_PI
 #define CMATH_PI	3.1415926
 #endif
