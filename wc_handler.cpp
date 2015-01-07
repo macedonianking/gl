@@ -81,6 +81,11 @@ bool WcHandler::PostMessageDelayed(const WcMessage &msg, millis_t delay)
 	return false;
 }
 
+void WcHandler::RemoveMessage(int what)
+{
+	mQueue->DoDeleteMessage(this, what);
+}
+
 void WcHandler::HandleMessage(WcMessage &msg)
 {
 	if (mTarget != NULL)

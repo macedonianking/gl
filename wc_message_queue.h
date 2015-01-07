@@ -25,7 +25,8 @@ public:
 	virtual ~WcMessageQueue();
 
 	void		AddMessage(const WcMessage& msg);
-	void		DelMessage(int what);
+	void		DoDeleteMessage(WcHandler *handler);
+	void		DoDeleteMessage(WcHandler *handler, int what);
 	void		Clear();
 	bool		Next(WcMessage *msg);
 	bool		NextTime(millis_t *dstMillis) const;
@@ -33,9 +34,15 @@ public:
 	friend class WcLooper;
 	friend class WcHandler;
 private:
-	bool DoDeleteMessage(MessageQueue &queue, int what);
-	void DoDeleteMessageForHandler(WcHandler *handler);
-	bool DoDeleteMessageForHandler(MessageQueue &queue, WcHandler *handler);
+	bool DoDeleteMessageForHandler(WcHandler *handler);
+	bool DoDeleteMessageForHandler(WcHandler *handler, 
+								   int what);
+
+	bool DoDeleteMessageForHandler(MessageQueue &queue, 
+								   WcHandler *handler);
+	bool DoDeleteMessageForHandler(MessageQueue &queue,
+								   WcHandler *handler,
+								   int what);
 	void DoClearMessageQueue(MessageQueue &queue);
 	void NotifyQueueChanged();
 };

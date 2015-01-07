@@ -51,6 +51,8 @@ public:
 							millis_t delay);
 	bool PostMessageDelayed(const WcMessage &msg, 
 							millis_t delay);
+	
+	void RemoveMessage(int what);
 
 	virtual void HandleMessage(WcMessage &msg);
 	virtual void HandleClearMessage(WcMessage &msg);

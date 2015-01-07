@@ -10,11 +10,20 @@
 
 #define TIMER_ID_UI		1000
 
+#include <vector>
+
+class WcAnimator;
+
 class WcContext : public WcHandlerTarget
 {
 public:
 	WcContext();
 	virtual ~WcContext();
+
+	void SetFPS(int fps);
+
+	void Invalidate();
+	void InvalidateFPS();
 
 	virtual int GetWindowWidth()
 	{
@@ -30,6 +39,7 @@ public:
 	virtual void OnSetProjectionMatrix();
 
 	virtual void Draw();
+	virtual bool OnUpdate();
 	virtual void OnDraw();
 
 	// WcHandlerTarget methods
@@ -38,10 +48,18 @@ public:
 
 	static WcContext *GetCurrentContext();
 
+	void 	AddAnimator(WcAnimator *animator);
+	void 	DelAnimator(WcAnimator *animator);
+private:
+	bool UpdateAnimators();
+
 protected:
+	int 		mPrivateFlags;
 	GLsizei		mWindowW;
 	GLsizei		mWindowH;
 	int			mFPS;
+	millis_t	mFPSPeriod;
+	millis_t  	mLastUpdateMillis;
 
 	bool		mTimerRunning;
 	bool		mDrawHoriLine;
@@ -53,6 +71,8 @@ protected:
 
 	WcColorF	mBackgroundColor;
 	WcHandler	*mHandler;
+
+	std::vector<WcAnimator*> mAnimatorList;
 };
 
 #endif // WC_CONTEXT_H

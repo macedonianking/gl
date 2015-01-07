@@ -52,6 +52,8 @@ void WcContext9::HandleMessage(WcMessage &msg)
 		case MSG_HELLO_WORLD:
 			{
 				LOG(ERROR) << "MSG_HELLO_WORLD";
+				mHandler->RemoveMessage(MSG_HELLO_WORLD);
+				mHandler->PostMessageDelayed(MSG_HELLO_WORLD, 1000);
 				break;
 			}
 		default:

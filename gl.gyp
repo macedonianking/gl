@@ -63,6 +63,8 @@
 				'wc_looper.cpp',
 				'wc_loper.h',
 				'wc_unique_ptr.h',
+				'wc_animator.cpp',
+				'wc_animator.h',
 			],
 			'libraries': [
 				'-lGL',

@@ -70,7 +70,7 @@ millis_t WcTime::CurrentTimeMillis()
 	millis_t millis;
 
 	clock_gettime(CLOCK_MONOTONIC, &value);
-	millis = static_cast<millis_t>(value.tv_sec);
+	millis = static_cast<millis_t>(value.tv_sec) * WC_TIME_MILLIS_PER_SECOND;
 	millis += static_cast<millis_t>(value.tv_nsec / WC_TIME_NANOS_PER_MILLIS);
 	return millis;
 }

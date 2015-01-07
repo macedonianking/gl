@@ -6,3 +6,4 @@ gl.Makefile
 main.target.mk
 Makefile
 main
+gl.sublime*

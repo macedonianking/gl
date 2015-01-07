@@ -5,6 +5,10 @@
 #include <iostream>
 #include <sstream>
 
+#ifndef ASSERT_FAILURE
+#define ASSERT_FAILURE()	asset(false)
+#endif
+
 #ifndef NDEBUG
 #define	DASSERT(cond)
 #else
@@ -51,14 +55,19 @@ class LogDCheck : public LogMessage
 {
 public:
 	LogDCheck(bool result, LogLevel level, const char *file, int line)
-		: LogMessage(level, file, line)
+		: LogMessage(level, file, line),
+		  mResult(result)
 	{
-		SetShouldPrintMessage(result);
+		SetShouldPrintMessage(!result);
 	}
 
 	~LogDCheck()
 	{
+		DASSERT(result);
 	}
+
+private:
+	bool		mResult;
 };
 
 #endif 

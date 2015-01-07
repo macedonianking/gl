@@ -36,50 +36,55 @@ void WcMessageQueue::AddMessage(const WcMessage &msg)
 	NotifyQueueChanged();
 }
 
-void WcMessageQueue::DelMessage(int what)
+void WcMessageQueue::DoDeleteMessage(WcHandler *handler)
 {
-	bool changed = false;
-
-	if (DoDeleteMessage(mNQueue, what))
-	{
-		changed = true;
-	}
-
-	if (DoDeleteMessage(mDQueue, what))
-	{
-		changed = true;
-	}
-
-	if (changed)
-	{
-		NotifyQueueChanged();		
-	}
-}
-
-void WcMessageQueue::DoDeleteMessageForHandler(WcHandler *handler)
-{
-	bool r = false;
-
-	r |= DoDeleteMessageForHandler(mNQueue, handler);
-	r |= DoDeleteMessageForHandler(mDQueue, handler);
-
-	if (r)
+	if (DoDeleteMessageForHandler(handler))
 	{
 		NotifyQueueChanged();
 	}
 }
 
-bool WcMessageQueue::DoDeleteMessage(MessageQueue &queue, int what)
+void WcMessageQueue::DoDeleteMessage(WcHandler *handler, int what)
+{
+	if (DoDeleteMessageForHandler(handler, what))
+	{
+		NotifyQueueChanged();
+	}
+}
+
+bool WcMessageQueue::DoDeleteMessageForHandler(WcHandler *handler)
+{
+	if (!DoDeleteMessageForHandler(mNQueue, handler)
+		&& !DoDeleteMessageForHandler(mDQueue, handler))
+	{
+		return false;
+	}
+	return true;
+}
+
+bool WcMessageQueue::DoDeleteMessageForHandler(WcHandler *handler,
+											   int what)
+{
+	if (!DoDeleteMessageForHandler(mNQueue, handler, what)
+		&& !DoDeleteMessageForHandler(mDQueue, handler, what))
+	{
+		return false;
+	}
+	return true;
+}
+
+bool WcMessageQueue::DoDeleteMessageForHandler(MessageQueue &queue,
+											   WcHandler *handler,
+											   int what) 
 {
 	bool r = false;
 
 	iterator iter = queue.begin();
-	while (iter != queue.end())	
+	while (iter != queue.end())
 	{
-		if (iter->what == what)
+		if (iter->what == what && iter->handler == handler)
 		{
 			iter = queue.erase(iter);
-			r = true;
 		}
 		else
 		{
